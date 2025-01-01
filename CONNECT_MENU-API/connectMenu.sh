@@ -5,7 +5,7 @@
 connectMenu() {
     dbPath=$1
     dbName=$(basename "$dbPath")  # Extract just the database name
-    
+
     choice=$(zenity --list \
         --width=350 --height=350 \
         --extra-button="Exit" \
@@ -17,9 +17,9 @@ connectMenu() {
         "Delete from Table" "Exit")
     
     case $choice in
-        "Create a Database")
-            ./createDatabase.sh
-            connectMenu
+        "Create Table")
+            ./createTable.sh
+            createTable
             ;;
         "List Databases")
             ./listDatabase.sh

@@ -28,3 +28,17 @@ print "################################################\n"
 print "Now lets show your processes!\n"
 top | grep $user_name
 
+# #########################################################
+# #########################################################
+# testing the zenity
+
+if zenity --question --text="Do you want to continue?";
+then
+    echo "User selected Yes"
+else
+    echo "User selected No"
+fi
+
+
+FILE=$(zenity --file-selection --title="Choose a file")
+echo "You selected: $FILE"

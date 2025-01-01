@@ -8,7 +8,7 @@
 # Hossam Mahmoud
 
 mainMenu() {
-    choice=$(zenity --list --title="ITI HZA DBMS" --text="Choose your preferred action:" --width=300 --height=300\
+    choice=$(zenity --list --title="ITI HZA DBMS" --text="Choose your preferred action:" --width=350 --height=350\
         --column="DBMS Options:" \
         "Create a Database" "List Databases" "Connect to a Database" "Drop a Database" "Exit" --extra-button="Exit")
     

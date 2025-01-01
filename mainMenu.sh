@@ -42,39 +42,6 @@ mainMenu() {
     esac
 }
 
-createDatabase() {
-    filename=$(zenity --entry --title="Create File" --text="Enter file name:")
-    if [[ -n "$filename" ]]; then
-        touch "$filename" && \
-        zenity --info --text="File '$filename' created successfully." --title="Success"
-    else
-        zenity --error --text="No file name provided." --title="Error"
-    fi
-    mainMenu
-}
-
-listDatabase() {
-    filelist=$(ls)
-    zenity --text-info --title="Files in Directory" --width=500 --height=300 <<< "$filelist"
-    mainMenu
-}
-
-connectDatabase() {
-    filelist=$(ls)
-    zenity --text-info --title="Files in Directory" --width=500 --height=300 <<< "$filelist"
-    mainMenu
-}
-
-dropDatabase() {
-    filename=$(zenity --entry --title="Delete File" --text="Enter file name to delete:")
-    if [[ -e "$filename" ]]; then
-        rm "$filename" && \
-        zenity --info --text="File '$filename' deleted successfully." --title="Success"
-    else
-        zenity --error --text="File '$filename' not found." --title="Error"
-    fi
-    mainMenu
-}
 
 # Start the application
 mainMenu

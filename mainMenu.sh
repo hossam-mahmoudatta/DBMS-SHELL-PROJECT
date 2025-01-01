@@ -1,5 +1,17 @@
 #!/usr/bin/zsh
 
+# HZA DBMS was created by:
+# Abdelrahman Khaled
+# Zeyad Tarek
+# Hossam Mahmoud
+
+# Source external function files
+source ./createDatabase.sh
+source ./listDatabase.sh
+source ./connectDatabase.sh
+source ./dropDatabase.sh
+
+
 mainMenu() {
     choice=$(zenity --list --title="ITI HZA DBMS" --text="Choose your preferred action:" --width=300 --height=300\
         --column="DBMS Options:" \

@@ -19,7 +19,7 @@ connectMenu() {
     case $choice in
         "Create Table")
             ./createTable.sh
-            createTable
+            connectMenu
             ;;
         "List Databases")
             ./listDatabase.sh

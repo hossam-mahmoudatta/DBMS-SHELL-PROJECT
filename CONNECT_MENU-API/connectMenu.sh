@@ -19,7 +19,7 @@ connectMenu() {
     case $choice in
         "Create Table")
             # pwd - had to change the path.
-            ../CONNECT_MENU-API/createTable.sh
+            ../CONNECT_MENU-API/createTable.sh  $dbPath
             connectMenu
             ;;
         "List Databases")

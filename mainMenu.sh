@@ -1,4 +1,5 @@
-#!/usr/bin/zsh
+
+################################## !/usr/bin/zsh
 #!/bin/bash
 
 # HZA DBMS was created by:

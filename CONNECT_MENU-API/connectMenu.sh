@@ -23,15 +23,15 @@ connectMenu() {
             connectMenu
             ;;
         "List Databases")
-            ./listDatabase.sh
+            ../CONNECT_MENU-API/listDatabase.sh
             connectMenu
             ;;
         "Connect to a Database")
-            ./connectDatabase.sh
+            ../CONNECT_MENU-API/connectDatabase.sh
             connectMenu
             ;;
         "Drop a Database")
-            ./dropDatabase.sh
+            ../CONNECT_MENU-API/dropDatabase.sh
             connectMenu
             ;;
         "Exit")

@@ -1,7 +1,7 @@
 # Created: 2025-01-01 15:00:00
 # Created by Hossam
 
-listDatabase() {
+connectDatabase() {
     # Replace with your directory path
     dir="../DATABASES/"
 
@@ -31,4 +31,4 @@ listDatabase() {
 }
 
 # Call the function
-listDatabase
+connectDatabase

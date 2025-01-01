@@ -8,10 +8,10 @@
 # Hossam Mahmoud
 
 # Source external function files
-source ./createDatabase.sh
-source ./listDatabase.sh
-source ./connectDatabase.sh
-source ./dropDatabase.sh
+# source ./createDatabase.sh
+# source ./listDatabase.sh
+# source ./connectDatabase.sh
+# source ./dropDatabase.sh
 
 
 mainMenu() {
@@ -21,16 +21,16 @@ mainMenu() {
     
     case $choice in
         "Create a Database")
-            createDatabase
+            ./createDatabase.sh
             ;;
         "List Databases")
-            listDatabase
+            ./listDatabase.sh
             ;;
         "Connect to a Database")
-            connectDatabase
+            ./connectDatabase.sh
             ;;
         "Drop a Database")
-            dropDatabase
+            ./dropDatabase.sh
             ;;
         "Exit")
             zenity --info --text="Thank you for using HZA DBMS!" --title="Exit"

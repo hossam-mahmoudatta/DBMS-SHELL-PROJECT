@@ -5,7 +5,7 @@
 
 createTable() {
   # Ensure tables are stored in a dedicated folder
-  mkdir -p tables
+  mkdir -p TABLES
 
   # Prompt for the table name using Zenity
   tableName=$(zenity --entry --title="Table Name" --text="Enter table name:")
@@ -17,7 +17,7 @@ createTable() {
   fi
 
   # Check if the table already exists
-  table_path="tables/$tableName"
+  table_path="TABLES/$tableName"
   if [ -f "$table_path" ]; then
     zenity --error --text="Table '$tableName' already exists."
     return

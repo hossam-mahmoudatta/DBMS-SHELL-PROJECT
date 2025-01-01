@@ -7,13 +7,6 @@
 # Zeyad Tarek
 # Hossam Mahmoud
 
-# Source external function files
-# source ./createDatabase.sh
-# source ./listDatabase.sh
-# source ./connectDatabase.sh
-# source ./dropDatabase.sh
-
-
 mainMenu() {
     choice=$(zenity --list --title="ITI HZA DBMS" --text="Choose your preferred action:" --width=300 --height=300\
         --column="DBMS Options:" \
@@ -22,15 +15,19 @@ mainMenu() {
     case $choice in
         "Create a Database")
             ./createDatabase.sh
+            mainMenu
             ;;
         "List Databases")
             ./listDatabase.sh
+            mainMenu
             ;;
         "Connect to a Database")
             ./connectDatabase.sh
+            mainMenu
             ;;
         "Drop a Database")
             ./dropDatabase.sh
+            mainMenu
             ;;
         "Exit")
             zenity --info --text="Thank you for using HZA DBMS!" --title="Exit"

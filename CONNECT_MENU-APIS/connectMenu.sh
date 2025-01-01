@@ -2,7 +2,7 @@
 ################################## !/usr/bin/zsh
 #!/bin/bash
 
-mainMenu() {
+connectMenu() {
     choice=$(zenity --list --title="ITI HZA DBMS" --text="Choose your preferred action:" --width=350 --height=350\
         --column="DBMS Options:" \
         "Create a Database" "List Databases" "Connect to a Database" "Drop a Database" "Exit" --extra-button="Exit")
@@ -10,19 +10,19 @@ mainMenu() {
     case $choice in
         "Create a Database")
             ./createDatabase.sh
-            mainMenu
+            connectMenu
             ;;
         "List Databases")
             ./listDatabase.sh
-            mainMenu
+            connectMenu
             ;;
         "Connect to a Database")
             ./connectDatabase.sh
-            mainMenu
+            connectMenu
             ;;
         "Drop a Database")
             ./dropDatabase.sh
-            mainMenu
+            connectMenu
             ;;
         "Exit")
             zenity --info --text="Thank you for using HZA DBMS!" --title="Exit"
@@ -30,11 +30,11 @@ mainMenu() {
             ;;
         *)
             zenity --error --text="Invalid option. Please Try again." --title="Error"
-            mainMenu
+            connectMenu
             ;;
     esac
 }
 
 
 # Start the application
-mainMenu
+connectMenu

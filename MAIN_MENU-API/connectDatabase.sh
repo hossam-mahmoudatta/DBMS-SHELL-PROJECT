@@ -23,7 +23,7 @@ connectDatabase() {
             zenity --info --text="You selected the database: $selectedDB"
             
             # Call a function or script for the next menu
-            connectMenu "$dir/$selectedDB"
+            ./CONNECT_MENU-API/connectMenu.sh "$dir/$selectedDB"
         else
             zenity --warning --text="No database selected."
         fi

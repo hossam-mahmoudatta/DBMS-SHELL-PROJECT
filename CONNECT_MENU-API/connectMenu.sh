@@ -4,9 +4,16 @@
 
 connectMenu() {
     dbPath=$1
-    choice=$(zenity --list --title="Connect Menu" --text="What would you want to do?" --width=350 --height=350\
-        --column="DBMS Options:" \
-        "Create a Database" "List Databases" "Connect to a Database" "Drop a Database" "Exit" --extra-button="Exit")
+    dbName=$(basename "$dbPath")  # Extract just the database name
+    choice=$(zenity --list\
+        --width=350 --height=350\
+        --extra-button="Exit"\
+        --title="$dbName"\
+        --text="What would you want to do?"\
+        --column="Database Options:" \
+        "Create Table" "List Tables" "Drop Table" \
+        "Select from Table" "Insert into Table" "Update into Table" \
+        "Delete from Table" "Exit")
     
     case $choice in
         "Create a Database")
@@ -26,7 +33,7 @@ connectMenu() {
             connectMenu
             ;;
         "Exit")
-            zenity --info --text="Thank you for using HZA DBMS!" --title="Exit"
+            zenity --info --text="Exitting Database Manager.." --title="Exit"
             exit 0
             ;;
         *)

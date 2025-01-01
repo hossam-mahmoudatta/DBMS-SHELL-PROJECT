@@ -1,4 +1,4 @@
-
+# Creted: 2021-07-29 15:00:00 
 create_database() {
     # Prompt the user for a database name using Zenity
     db_name=$(zenity --entry --title="Create Database" --text="Enter your database name:")

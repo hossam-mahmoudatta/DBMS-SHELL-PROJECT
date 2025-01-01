@@ -4,7 +4,7 @@
 
 connectMenu() {
     dbPath=$1
-    choice=$(zenity --list --title="ITI HZA DBMS" --text="Choose your preferred action:" --width=350 --height=350\
+    choice=$(zenity --list --title="Connect Menu" --text="What would you want to do?" --width=350 --height=350\
         --column="DBMS Options:" \
         "Create a Database" "List Databases" "Connect to a Database" "Drop a Database" "Exit" --extra-button="Exit")
     

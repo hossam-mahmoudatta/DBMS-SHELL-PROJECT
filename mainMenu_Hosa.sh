@@ -1,44 +1,67 @@
 #!/usr/bin/zsh
 
-# Ask for the user's name
-print "Hello!\nWelcome to Hosa's Shell!\n"
-print "############ Please enter your UserName:"
+mainMenu() {
+    choice=$(zenity --list --title="ITI HZA DBMS" --text="Choose your preferred action:" --width=300 --height=300\
+        --column="DBMS Options:" \
+        "Create a Database" "List Databases" "Connect to a Database" "Drop a Database" "Exit" --extra-button="Exit")
+    
+    case $choice in
+        "Create a Database")
+            createDatabase
+            ;;
+        "List Databases")
+            listDatabase
+            ;;
+        "Connect to a Database")
+            connectDatabase
+            ;;
+        "Drop a Database")
+            dropDatabase
+            ;;
+        "Exit")
+            zenity --info --text="Thank you for using HZA DBMS!" --title="Exit"
+            exit 0
+            ;;
+        *)
+            zenity --error --text="Invalid option. Please Try again." --title="Error"
+            mainMenu
+            ;;
+    esac
+}
 
-read user_name
+createDatabase() {
+    filename=$(zenity --entry --title="Create File" --text="Enter file name:")
+    if [[ -n "$filename" ]]; then
+        touch "$filename" && \
+        zenity --info --text="File '$filename' created successfully." --title="Success"
+    else
+        zenity --error --text="No file name provided." --title="Error"
+    fi
+    mainMenu
+}
 
-# Greet the user
-print "############ Hello, $user_name! Welcome to the Shell!\n"
-print "Lets print your info now!\n"
+listDatabase() {
+    filelist=$(ls)
+    zenity --text-info --title="Files in Directory" --width=500 --height=300 <<< "$filelist"
+    mainMenu
+}
 
-ll /home/$user_name
+connectDatabase() {
+    filelist=$(ls)
+    zenity --text-info --title="Files in Directory" --width=500 --height=300 <<< "$filelist"
+    mainMenu
+}
 
-print "\n################################################"
-print "################################################\n"
+dropDatabase() {
+    filename=$(zenity --entry --title="Delete File" --text="Enter file name to delete:")
+    if [[ -e "$filename" ]]; then
+        rm "$filename" && \
+        zenity --info --text="File '$filename' deleted successfully." --title="Success"
+    else
+        zenity --error --text="File '$filename' not found." --title="Error"
+    fi
+    mainMenu
+}
 
-print "We'll now copy a folder to temp DIR!"
-sudo cp -r /home/$user_name/Pictures/ /tmp/temporarry/
-
-print "\n################################################"
-print "################################################\n"
-print "Copied Successfully!"
-print "Folder copied to /tmp/temporary/!"
-print "\n################################################"
-print "################################################\n"
-
-print "Now lets show your processes!\n"
-top | grep $user_name
-
-# #########################################################
-# #########################################################
-# testing the zenity
-
-if zenity --question --text="Do you want to continue?";
-then
-    echo "User selected Yes"
-else
-    echo "User selected No"
-fi
-
-
-FILE=$(zenity --file-selection --title="Choose a file")
-echo "You selected: $FILE"
+# Start the application
+mainMenu

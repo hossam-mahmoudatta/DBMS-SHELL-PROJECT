@@ -1,5 +1,6 @@
-# Creted: 2021-07-29 15:00:00 
-create_database() {
+# Created: 2025-01-01 15:00:00
+
+createDatabase() {
     # Prompt the user for a database name using Zenity
     db_name=$(zenity --entry --title="Create Database" --text="Enter your database name:")
 
@@ -20,10 +21,10 @@ create_database() {
         zenity --warning --title="Database Exists" --text="Database \"$db_name\" already exists!"
     else
         # Create the directory for the database
-        mkdir "$db_name"
+        mkdir -p DATABASES/"$db_name"
         zenity --info --title="Database Created" --text="Database \"$db_name\" created successfully."
     fi
 }
 
 # Call the function
-create_database
+createDatabase

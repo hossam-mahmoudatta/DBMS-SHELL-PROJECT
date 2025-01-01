@@ -2,7 +2,6 @@
 # Created by Hossam
 
 listDatabase() {
-    # Replace with your directory path
     dir="../DATABASES/"
 
     # Get the list of files in the directory
@@ -13,20 +12,8 @@ listDatabase() {
     then
         zenity --info --text="You don't have any databases!"
     else
-        # Display the databases in a clickable list
-        selectedDB=$(zenity --list --title="Your Databases" --text="Select a Database:" --column="Databases" $databasesLists)
-
-        # Check if a database was selected
-        if [ -n "$selectedDB" ];
-        then
-            # Navigate to the next menu based on the selected database
-            zenity --info --text="You selected the database: $selectedDB"
-            
-            # Call a function or script for the next menu
-            databaseMenu "$dir/$selectedDB"
-        else
-            zenity --warning --text="No database selected."
-        fi
+        # Use Zenity to display the contents in a list
+        zenity --list --title="Your Databases" --text="Here are your databases" --column="Items" $databasesLists
     fi
 }
 

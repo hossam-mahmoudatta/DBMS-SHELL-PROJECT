@@ -2,7 +2,7 @@
 # Created by Hossam
 
 listDatabase() {
-    dir="DATABASES/"  # Replace with your directory path
+    dir="../DATABASES/"  # Replace with your directory path
 
     # Get the list of files in the directory
     databasesLists=$(ls "$dir")

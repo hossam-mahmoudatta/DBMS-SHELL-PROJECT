@@ -17,11 +17,11 @@ createDatabase() {
     fi
 
     # Check if the directory already exists
-    if [ -d "$db_name" ]; then
+    if [ -d "../DATABASES/$db_name" ]; then
         zenity --warning --title="Database Exists" --text="Database \"$db_name\" already exists!"
     else
         # Create the directory for the database
-        mkdir -p DATABASES/"$db_name"
+        mkdir -p ../DATABASES/"$db_name"
         zenity --info --title="Database Created" --text="Database \"$db_name\" created successfully."
     fi
 }

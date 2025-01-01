@@ -29,7 +29,7 @@ Drop_Database(){
                 fi
 
                 # Delete the database (directory)
-                rm -r "$db_name"
+                rm -r DATABASES/"$db_name"
                 zenity --info --text="Database $db_name Deleted Successfully!"
                 
         else  

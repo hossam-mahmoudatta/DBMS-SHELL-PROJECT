@@ -38,10 +38,8 @@ createTable() {
 }
 
 
-
-
-
-
+# call the Function
+createTable
 
 
 

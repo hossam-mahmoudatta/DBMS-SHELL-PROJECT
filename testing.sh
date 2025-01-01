@@ -1,27 +1,32 @@
 #!/usr/bin/zsh
+# GTK_THEME="Arc-Dark" zenity --info --text="Custom theme applied!" --width=300 --height=150
+#!/bin/bash
 
-main_menu() {
-    choice=$(zenity --list --title="File Manager" --text="Choose an action:" \
-        --column="Option" \
-        "Create File" "List Files" "Delete File" "Exit")
+mainMenu() {
+    choice=$(zenity --list --title="ITI HZA DBMS" --text="Choose your preferred action:" --width=300 --height=300\
+        --column="DBMS Options:" \
+        "Create a Database" "List Databases" "Connect to a Database" "Drop a Database" "Exit" --extra-button="About")
     
     case $choice in
-        "Create File")
-            create_file
+        "Create a Database")
+            createDatabase
             ;;
-        "List Files")
-            list_files
+        "List Databases")
+            listDatabase
             ;;
-        "Delete File")
-            delete_file
+        "Connect to a Database")
+            connectDatabase
+            ;;
+        "Drop a Database")
+            dropDatabase
             ;;
         "Exit")
-            zenity --info --text="Goodbye!" --title="Exit"
+            zenity --info --text="Thank you for using HZA DBMS!" --title="Exit"
             exit 0
             ;;
         *)
-            zenity --error --text="Invalid choice. Try again." --title="Error"
-            main_menu
+            zenity --error --text="Invalid option. Please Try again." --title="Error"
+            mainMenu
             ;;
     esac
 }
@@ -34,13 +39,13 @@ create_file() {
     else
         zenity --error --text="No file name provided." --title="Error"
     fi
-    main_menu
+    mainMenu
 }
 
 list_files() {
     filelist=$(ls)
     zenity --text-info --title="Files in Directory" --width=500 --height=300 <<< "$filelist"
-    main_menu
+    mainMenu
 }
 
 delete_file() {
@@ -51,8 +56,8 @@ delete_file() {
     else
         zenity --error --text="File '$filename' not found." --title="Error"
     fi
-    main_menu
+    mainMenu
 }
 
 # Start the application
-main_menu
+mainMenu

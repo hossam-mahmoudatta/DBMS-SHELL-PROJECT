@@ -22,7 +22,7 @@ connectMenu() {
             ../CONNECT_MENU-API/createTable.sh  $dbPath
             connectMenu
             ;;
-        "List Databases")
+        "List Tables")
             ../CONNECT_MENU-API/listDatabase.sh
             connectMenu
             ;;

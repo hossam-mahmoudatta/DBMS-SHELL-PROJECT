@@ -28,8 +28,8 @@ connectMenu() {
             connectMenu "$dbPath"
             ;;
         "List Tables")
-            ../CONNECT_MENU-API/listDatabase.sh
-            connectMenu
+            ../CONNECT_MENU-API/listTable.sh "$dbPath"
+            connectMenu "$dbPath"
             ;;
         "Connect to a Database")
             ../CONNECT_MENU-API/connectDatabase.sh

@@ -9,19 +9,23 @@ connectMenu() {
 
     choice=$(zenity --list \
         --width=350 --height=350 \
-        --extra-button="Exit" \
         --title="$dbName" \
         --text="What would you want to do with $dbName" \
         --column="Database Options:" \
-        "Create Table" "List Tables" "Drop Table" \
-        "Select from Table" "Insert into Table" "Update into Table" \
-        "Delete from Table" "Exit")
+        "Create Table" \
+        "List Tables" \
+        "Drop Table" \
+        "Select from Table" \
+        "Insert into Table" \
+        "Update into Table" \
+        "Delete from Table" \
+        "Exit" --extra-button="Exit" )
     
     case $choice in
         "Create Table")
             # pwd - had to change the path.
-            ../CONNECT_MENU-API/createTable.sh  $dbPath
-            connectMenu
+            ../CONNECT_MENU-API/createTable.sh  "$dbPath"
+            connectMenu "$dbPath"
             ;;
         "List Tables")
             ../CONNECT_MENU-API/listDatabase.sh
@@ -48,4 +52,4 @@ connectMenu() {
 
 
 # Start the application
-connectMenu
+connectMenu "$1"

@@ -8,6 +8,7 @@ createTable() {
   cd ../DATABASES/$dbPath/
   echo "Current Directory: $(pwd)"
   dbPath=$1
+  echo "in createTable @ $dbPath"
   mkdir -p ../DATABASES/$dbPath/TABLES
 
 
@@ -46,7 +47,7 @@ createTable() {
 
 
 # call the Function
-createTable
+createTable $1
 
 
 

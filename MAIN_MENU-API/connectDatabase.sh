@@ -4,6 +4,7 @@
 connectDatabase() {
     # Replace with your directory path
     dir="../DATABASES"
+    currentDIR=$(dirname "$0")
 
     # Get the list of files in the directory
     databasesLists=$(ls "$dir")

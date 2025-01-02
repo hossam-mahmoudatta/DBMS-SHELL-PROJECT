@@ -3,7 +3,7 @@
 
 connectDatabase() {
     # Replace with your directory path
-    dir="../DATABASES/"
+    dir="../DATABASES"
 
     # Get the list of files in the directory
     databasesLists=$(ls "$dir")
@@ -23,6 +23,10 @@ connectDatabase() {
             zenity --info --text="You selected the database: $selectedDB"
             
             # Call a function or script for the next menu
+            echo "Current Directory: $(pwd)"
+            echo "Current Directory: $selectedDB"
+            echo "Current Directory: $dir/$selectedDB"
+
             ../CONNECT_MENU-API/connectMenu.sh "$dir/$selectedDB"
         else
             zenity --warning --text="No database selected."

@@ -5,6 +5,8 @@
 
 createTable() {
   # Ensure tables are stored in a dedicated folder
+  cd ../DATABASES/$dbPath/
+  echo "Current Directory: $(pwd)"
   dbPath=$1
   mkdir -p ../DATABASES/$dbPath/TABLES
 

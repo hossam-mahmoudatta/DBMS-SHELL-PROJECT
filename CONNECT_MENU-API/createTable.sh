@@ -5,7 +5,7 @@
 
 createTable() {
   # Ensure tables are stored in a dedicated folder
-  dbPath= $1
+  dbPath=$1
   mkdir -p ../DATABASES/$dbPath/TABLES
 
 

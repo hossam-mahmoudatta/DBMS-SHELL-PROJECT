@@ -20,7 +20,7 @@ createTable() {
   fi
 
   # Check if the table already exists
-  tablePath="../DATABASES/TABLES/$tableName"
+  tablePath="$dbPath/TABLES/$tableName.meta"
   if [ -f "$tablePath" ];
   then
     zenity --error --text="Table '$tableName' already exists."

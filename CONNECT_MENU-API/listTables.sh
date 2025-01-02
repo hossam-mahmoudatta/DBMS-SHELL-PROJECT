@@ -19,4 +19,4 @@ listTable() {
 }
 
 # Call the function
-listTable
+listTable $1

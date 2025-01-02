@@ -24,9 +24,9 @@ connectDatabase() {
             zenity --info --text="You selected the database: $selectedDB"
             
             # Call a function or script for the next menu
-            echo "Current Directory: $(pwd)"
-            echo "Current Directory: $selectedDB"
-            echo "Current Directory: $dir/$selectedDB"
+            # echo "Current Directory: $(pwd)"
+            # echo "Current Directory: $selectedDB"
+            # echo "Current Directory: $dir/$selectedDB"
 
             ../CONNECT_MENU-API/connectMenu.sh "$dir/$selectedDB"
         else

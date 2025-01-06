@@ -25,6 +25,7 @@ pickTable() {
         then
             # Navigate to the next menu based on the selected database
             zenity --info --text="You selected the Table: $selectedTable"
+            return $selectedTable
         else
             zenity --warning --text="No database selected."
         fi

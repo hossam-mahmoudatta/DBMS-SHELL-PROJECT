@@ -4,73 +4,46 @@
 #########################################################
 #########################################################
 
+# echo $(pwd)
+source ../CONNECT_MENU-API/pickTable.sh
+
 # This API should allow us to insert into a table of our choice
 insertTable() {
-    dbPath=$1
-    dir="$dbPath/TABLES/"
-    # Get the list of files in the directory
-    tablesList=$(ls $dir)
+    $selectedTable=pickTable
+    echo You passed the call to pickTable # Verify that the function got called
+    
+    # Verify that the selected table is correct
+    echo $selectedTable
 
-    # Check if the directory contains files
-    if [ -z "$tablesList" ];
-    then
-        zenity --info --text="You don't have any Tables!"
-    else
-        # Display the databases in a clickable list
-        selectedTable=$(zenity --list --title="Your Tables" --text="Select a Table:" --column="Tables" $tablesList)
+    # Read the schema (first row) from the table
+    schema=$(head -n 1 "$tablePath")
+    echo $schema
+    columns=(${(s:,:)schema})  # Split schema by comma
 
-        # Check if a table was selected
-        if [ -n "$selectedTable" ];
-        then
-            # Navigate to the next menu based on the selected database
-            zenity --info --text="You selected the Table: $selectedTable"
-        else
-            zenity --warning --text="No database selected."
-        fi
-           
-    fi
-    # Define the database path
-    dbPath=$1
+    # Prepare to collect values for each column
+    values=()
 
-    # Display a Zenity input box to ask for the table name
-    tableName=$(zenity --entry --title="Drop Table" --text="Enter Table Name:")
+    # Loop through each column in the schema
+    for column in "${columns[@]}";
+    do
+    value=$(zenity --entry --title="Insert Data" --text="Enter value for '$column':")
 
-    # If the user cancels the input box, exit the function
-    if [ -z "$tableName" ]; then
-        zenity --info --title="Drop Table" --text="No table name entered!"
+    # Check if value is empty
+    if [[ -z "$value" ]]; then
+        zenity --error --text="Value for '$column' cannot be empty."
         return
     fi
 
+    values+=("$value")
+    done
 
+    # Join values with commas
+    newRow=$(IFS=,; echo "${values[*]}")
 
-    # Construct the full path to the table
-  tablePath="$dbPath/TABLES/$tableName.meta"
-
-    # Debugging output
-    echo "Table path: $tablePath"
-
-    # Check if the table exists
-    if [ -f "$tablePath" ]; then
-
-        # Confirm if you really want to delete the table
-        zenity --question --title="Confirm Deletion" \
-            --text="Are you sure you want to delete the $tableName table?" \
-            --ok-label="Yes" --cancel-label="No"
-        
-        # If the user clicks "No", cancel the deletion
-        if [ $? -ne 0 ]; then
-            zenity --info --title="Drop Table" --text="Table $tableName not deleted."
-            return
-        fi
-
-        # Delete the table
-        rm "$tablePath"
-        zenity --info --title="Drop Table" --text="Table $tableName deleted successfully."
-    else
-        zenity --error --title="Drop Table" --text="Table $tableName not found."
-    fi
+    # Append the new row to the table
+    echo "$newRow" >> "$tablePath"
+    zenity --info --text="Data inserted successfully into '$tablePath'."
 }
 
 # Call the function 
 insertTable $1
-  

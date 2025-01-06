@@ -30,6 +30,7 @@ dbPath=$1
             zenity --info --text="You selected the Table: $selectedTable"
         else
             zenity --warning --text="No database selected."
+            return
         fi
     fi
 
@@ -87,11 +88,22 @@ dbPath=$1
         --title="Select Column to Update" \
         --text="Select a column to update:" \
         --column="Columns" "${columns[@]:1}")  # Skip the first column (ID)
+    if [ $? -eq 1 ];
+    then
+        zenity --info --text="User Canceled!"
+        return
+    fi
 
     # Ask for the new value for the selected column
     newValue=$(zenity --entry \
         --title="Enter New Value" \
         --text="Enter the new value for column '$selectedColumn':")
+    
+    if [ $? -eq 1 ];
+    then
+        zenity --info --text="Column Update Canceled!"
+        return
+    fi
 
     # Find the index of the selected column
     columnIndex=-1

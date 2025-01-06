@@ -36,10 +36,6 @@ connectMenu() {
             ../CONNECT_MENU-API/listTable.sh "$dbPath"
             connectMenu "$dbPath"
             ;;
-        "Select from Table")
-            ../CONNECT_MENU-API/connectDatabase.sh
-            connectMenu
-            ;;
         "Insert into Table")
             ../CONNECT_MENU-API/insertTable.sh "$dbPath"
             connectMenu "$dbPath"

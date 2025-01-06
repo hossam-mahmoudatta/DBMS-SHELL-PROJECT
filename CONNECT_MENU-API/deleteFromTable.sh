@@ -1,18 +1,6 @@
 # Create Table Function 
 # Abdelrahman Khaled 
 
-
-
-
-
-
-
-
-
-
-
-
-
 deleteFromTable() {
 
   local dbPath=$1       # Path to the table (file)

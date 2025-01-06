@@ -35,9 +35,9 @@ connectMenu() {
             ../CONNECT_MENU-API/connectDatabase.sh
             connectMenu
             ;;
-        "Drop a Database")
-            ../CONNECT_MENU-API/dropDatabase.sh
-            connectMenu
+        "Drop Table")
+            ../CONNECT_MENU-API/dropTable.sh "$dbPath"
+            connectMenu "$dbPath"
             ;;
         "Exit")
             zenity --info --text="Quitting the Database Manager.." --title="Exit"

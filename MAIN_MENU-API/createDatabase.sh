@@ -1,4 +1,8 @@
-# Created: 2025-01-01 15:00:00
+#!/bin/bash
+
+# Abdelrahman Khaled
+
+
 
 createDatabase() {
     # Prompt the user for a database name using Zenity

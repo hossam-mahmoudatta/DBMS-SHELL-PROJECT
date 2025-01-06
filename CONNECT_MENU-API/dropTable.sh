@@ -3,9 +3,10 @@
 
 
 
-
-
 dropTable() {
+    # Define the database path
+    dbPath=$1
+
     # Display a Zenity input box to ask for the table name
     tableName=$(zenity --entry --title="Drop Table" --text="Enter Table Name:")
 
@@ -15,30 +16,38 @@ dropTable() {
         return
     fi
 
-    # Check if the table exists
-    if [ -f "$tableName" ]; then
 
-        # Confirm if you real wanna delete the table
-        confirm=$(zenity --question --title="Confirm Deletion" \
-            --text="Are you in ur mind to delete $tableName Table?" \
-            --ok-label="Yes" --cancel-label="No")
+
+    # Construct the full path to the table
+  tablePath="$dbPath/TABLES/$tableName.meta"
+
+    # Debugging output
+    echo "Table path: $tablePath"
+
+    # Check if the table exists
+    if [ -f "$tablePath" ]; then
+
+        # Confirm if you really want to delete the table
+        zenity --question --title="Confirm Deletion" \
+            --text="Are you sure you want to delete the $tableName table?" \
+            --ok-label="Yes" --cancel-label="No"
         
         # If the user clicks "No", cancel the deletion
         if [ $? -ne 0 ]; then
-            zenity --info --title="Drop Table" --text="Table $tableName Not Deleted Bro!!"
+            zenity --info --title="Drop Table" --text="Table $tableName not deleted."
             return
         fi
 
         # Delete the table
-        rm -r "$tableName"
-        zenity --info --title="Drop Table" --text="Table $tableName Deleted Successfully Bro!!"
+        rm "$tablePath"
+        zenity --info --title="Drop Table" --text="Table $tableName deleted successfully."
     else
-        # If the table doesn't exist, show a message
-        zenity --error --title="Drop Table" --text="Table $tableName Not Found Bro!!"
+        zenity --error --title="Drop Table" --text="Table $tableName not found."
     fi
 }
 
-
+# Call the function 
+dropTable $1
 
 
 

@@ -104,9 +104,10 @@ dbPath=$1
         fi
     done
 
+
     # Extract the current row and update the column value
-    rowArray=($(echo $rowToUpdate | tr ',' '\n'))  # Split row into array
-    rowArray[$columnIndex-1]="$newValue"  # Update the value for the selected column (skip ID)
+    IFS=',' read -r -a rowArray <<< "$rowToUpdate"  # Split row into array
+    rowArray[$columnIndex]="$newValue"  # Update the value for the selected column (skip ID)
 
     # Rebuild the updated row as a comma-separated string
     updatedRow=$(IFS=,; echo "${rowArray[*]}")

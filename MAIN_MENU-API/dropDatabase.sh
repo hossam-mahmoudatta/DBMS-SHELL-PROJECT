@@ -18,7 +18,7 @@ Drop_Database(){
         fi
 
         # Check if the database exists or not 
-        if [ -d "DATABASES/$db_name" ]; then
+        if [ -d "../DATABASES/$db_name" ]; then
 
                 # Use Zenity for confirmation before deletion
                 zenity --question --title="Confirm Deletion" --text="Are you in ur mind to decide deleting the '$db_name' database?" --ok-label="Yes" --cancel-label="No"
@@ -29,7 +29,7 @@ Drop_Database(){
                 fi
 
                 # Delete the database (directory)
-                rm -r DATABASES/"$db_name"
+                rm -r ../DATABASES/"$db_name"
                 zenity --info --text="Database $db_name Deleted Successfully!"
                 
         else  

@@ -110,22 +110,20 @@ dbPath=$1
     do
         if [ "${columns[$i]%%:*}" == "$selectedColumn" ];
         then
-            columnIndex=$i
+            columnIndex=$((i + 1))
             break
         fi
     done
 
 
-    # Extract the current row and update the column value
-    IFS=',' read -r -a rowArray <<< "$rowToUpdate"  # Split row into array
-    rowArray[$columnIndex]="$newValue"  # Update the value for the selected column (skip ID)
-
-    # Rebuild the updated row as a comma-separated string
-    updatedRow=$(IFS=,; echo "${rowArray[*]}")
-
-    # Replace the old row with the updated row in the table
-    # Use sed to update the row in the file
-    sed -i "s/^$rowID,.*/$updatedRow/" "$tablePath"
+    # Update the row using awk
+    awk -v rowID="$rowID" -v colIndex="$columnIndex" -v newValue="$newValue" -F',' '
+    BEGIN { OFS = FS }
+    $1 == rowID {
+        $colIndex = newValue
+    }
+    { print }
+    ' "$tablePath" > tmp && mv tmp "$tablePath"
 
     zenity --info --text="Row with ID $rowID updated successfully."
 }

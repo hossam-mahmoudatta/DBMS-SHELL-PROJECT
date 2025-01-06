@@ -110,6 +110,5 @@ createTable() {
   zenity --info --text="Table Metadata created successfully: $schema"
 }
 
-
 # call the Function
 createTable $1

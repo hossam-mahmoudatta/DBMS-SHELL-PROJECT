@@ -5,7 +5,7 @@
 #########################################################
 
 # This API should allow us to update any field inside the table
-SelectTable() {
+updateTable() {
     dbPath=$1
     dir="$dbPath/TABLES"
 

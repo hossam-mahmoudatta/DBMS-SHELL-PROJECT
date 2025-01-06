@@ -25,38 +25,26 @@ SelectTable() {
         # Extract columns from the selected table
         columns=$(head -n 1 "$dir/$selectedTable" | tr ',' '\n')
 
-        # Prepare the columns for zenity --checklist format
+        # Prepare columns for zenity checklist format
         checklistOptions=$(echo "$columns" | awk '{print "FALSE", NR, $1}')
 
         # Display a checklist to select columns
-        selectedColumns=$(zenity --list \
-            --checklist \
-            --title="Select Columns" \
-            --text="Select one or more columns:" \
+        selectedColumns=$(zenity --list --checklist --title="Select Columns" --text="Select one or more columns:" \
             --column="Select" --column="Index" --column="Column Name" $checklistOptions)
 
         if [ -n "$selectedColumns" ]; then
-            # Ask the user to specify a filter for the rows or the number of rows
-            filterType=$(zenity --list \
-                --radiolist \
-                --title="Filter Rows" \
-                --text="How would you like to filter the rows?" \
-                --column="Select" --column="Filter Type" \
-                TRUE "Filter by Column Values" \
-                FALSE "Select Number of Rows")
+            # Ask the user to specify a filter for rows or the number of rows
+            filterType=$(zenity --list --radiolist --title="Filter Rows" --text="How would you like to filter the rows?" \
+                --column="Select" --column="Filter Type" TRUE "Filter by Column Values" FALSE "View all rows")
 
             if [ "$filterType" == "Filter by Column Values" ]; then
                 # Initialize filter conditions
                 filterConditions=""
-
-                # Split selectedColumns into individual columns
                 IFS='|' read -r -a columnArray <<< "$selectedColumns"
 
                 for columnIndex in "${columnArray[@]}"; do
                     columnName=$(echo "$columns" | sed -n "${columnIndex}p")
                     filterValue=$(zenity --entry --title="Filter Rows" --text="Enter value for column '$columnName':")
-
-                    # If the user enters a value, add it to the filter conditions
                     if [ -n "$filterValue" ]; then
                         filterConditions+="\$$columnIndex == \"$filterValue\" && "
                     fi
@@ -65,40 +53,18 @@ SelectTable() {
                 # Trim trailing '&&'
                 filterConditions=${filterConditions%&& }
 
-                # Extract header and filter rows
+                # Extract and filter rows
                 header=$(head -n 1 "$dir/$selectedTable")
 
-                # Get column indices for the selected columns
-                selectedColumnIndices=()
-                IFS='|' read -r -a columnArray <<< "$selectedColumns"
-                for columnIndex in "${columnArray[@]}"; do
-                    selectedColumnIndices+=($(echo "$columns" | sed -n "${columnIndex}p"))
-                done
-
-                # If filterConditions is empty, it means user left values blank
                 if [ -z "$filterConditions" ]; then
-                    # Extract all rows, as the filter conditions are empty
-                    filteredData=$(awk -F, -v OFS=',' -v cols="$selectedColumns" 'BEGIN { split(cols, colArray, "|") }
-                    NR == 1 { next }
-                    {
-                        row = ""
-                        for (i in colArray) {
-                            row = row $colArray[i] (i == length(colArray) ? "" : OFS)
-                        }
-                        print row
+                    # Extract all rows if no filter conditions are provided
+                    filteredData=$(awk -F, -v OFS=',' -v cols="$selectedColumns" 'BEGIN { split(cols, colArray, "|") } NR > 1 { 
+                        row=""; for (i in colArray) row = row $colArray[i] (i == length(colArray) ? "" : OFS); print row 
                     }' "$dir/$selectedTable")
                 else
-                    # Filter rows based on the condition
-                    filteredData=$(awk -F, -v OFS=',' -v cols="$selectedColumns" 'BEGIN { split(cols, colArray, "|") }
-                    NR == 1 { next }
-                    {
-                        if ('"$filterConditions"') {
-                            row = ""
-                            for (i in colArray) {
-                                row = row $colArray[i] (i == length(colArray) ? "" : OFS)
-                            }
-                            print row
-                        }
+                    # Filter rows based on conditions
+                    filteredData=$(awk -F, -v OFS=',' -v cols="$selectedColumns" 'BEGIN { split(cols, colArray, "|") } NR > 1 { 
+                        if ('"$filterConditions"') { row=""; for (i in colArray) row = row $colArray[i] (i == length(colArray) ? "" : OFS); print row } 
                     }' "$dir/$selectedTable")
                 fi
 
@@ -110,16 +76,13 @@ SelectTable() {
                 fi
             else
                 # Select a specific number of rows
-                numRows=$(zenity --entry \
-                    --title="Number of Rows" \
-                    --text="Enter the number of rows to display:")
+                # Remove the part asking for the number of rows
+                zenity --info --text="Displaying all rows in the file: $selectedTable"
 
-                if [[ "$numRows" =~ ^[0-9]+$ ]]; then
-                    selectedRows=$(head -n "$((numRows + 1))" "$dir/$selectedTable")
-                    zenity --info --text="Selected rows:\n$selectedRows"
-                else
-                    zenity --error --text="Invalid number of rows entered."
-                fi
+                # Use `cat` to display the entire file content
+                allRows=$(cat "$dir/$selectedTable")
+                zenity --info --text="File content:\n$allRows"
+
             fi
         else
             zenity --warning --text="No columns selected."

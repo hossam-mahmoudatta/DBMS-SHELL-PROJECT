@@ -7,10 +7,16 @@ createTable() {
   dbPath=$1
   mkdir -p ../DATABASES/$dbPath/TABLES
   
-  while True:
+  while true;
   do
     # Prompt for the table name using Zenity
     tableName=$(zenity --entry --title="Table Name" --text="Enter table name:")
+    # If the user clicks Cancel, go back to the menu
+    if [ $? -eq 1 ];
+    then
+      zenity --info --text="Table Creation Canceled!"
+      return
+    fi
 
     # If the user cancels the input, exit the loop
     if [ -z "$tableName" ];
@@ -35,13 +41,19 @@ createTable() {
     fi
     break
   done
-    
 
   # Keep prompting for columns until the user decides to stop
   while true;
   do
     # Ask for the column name
     columnName=$(zenity --entry --title="Column Name" --text="Enter the name of the column:")
+    
+    # If the user clicks Cancel, go back to the menu
+    if [ $? -eq 1 ];
+    then
+      zenity --info --text="Table Creation Canceled!"
+      return
+    fi
 
     # If no column name is entered, stop the process
     if [ -z "$columnName" ];
@@ -54,7 +66,7 @@ createTable() {
     columnType=$(zenity --list --title="Select Data Type" \
       --text="Choose a data type for '$columnName':" \
       --column="Data Types" \
-      "int" "string" "float" "bool")
+      "int" "varchar" "float" "bool")
 
     # If no data type is selected, show an error
     if [ -z "$columnType" ];

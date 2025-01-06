@@ -1,13 +1,10 @@
 # Create Table Function 
 # Abdelrahman Khaled 
 
-<<<<<<< HEAD
 
 
 
 
-=======
->>>>>>> origin/main
 deleteFromTable() {
 
       dbPath=$1  # Path to the database directory
@@ -105,122 +102,96 @@ deleteFromTable $1
 
 
 
-
-
-
+# script without zenity
 
 # deleteFromTable() {
+#     dbPath=$1  # Path to the database directory
+#     dir="$dbPath/TABLES/"
+    
+#     # Get the list of tables in the directory
+#     tablesList=$(ls $dir)
 
-#   local dbPath=$1       # Path to the table (file)
-#   local column_name=$2   # Column name to check for deletion
-#   local value=$3         # Value to match in the column for deletion
+#     # Check if the directory contains files
+#     if [ -z "$tablesList" ]; then
+#         echo "You don't have any Tables!"
+#         return
+#     fi
 
-#   # Sanity check: Ensure all required arguments are provided
-#   if [[ -z "$dbPath" || -z "$column_name" || -z "$value" ]]; then
-#     echo "Error: Missing required arguments. Usage: deleteFromTable <dbPath> <column_name> <value>"
-#     return 1
-#   fi
+#     # Display the tables and ask the user to select one
+#     echo "Available Tables:"
+#     select deleteFromTable in $tablesList; do
+#         if [ -n "$deleteFromTable" ]; then
+#             break
+#         else
+#             echo "Invalid selection. Please try again."
+#         fi
+#     done
 
-#   # Check if the table (file) exists
-#   if [[ ! -f "$dbPath" ]]; then
-#     echo "Error: Table '$dbPath' not found."
-#     return 1
-#   fi
+#     tablePath="$dbPath/TABLES/$deleteFromTable"
 
-#   # Ensure the file is readable
-#   if [[ ! -r "$dbPath" ]]; then
-#     echo "Error: Cannot read the table '$dbPath'. Check file permissions."
-#     return 1
-#   fi
+#     # Verify that the selected table is correct
+#     echo "You selected the Table: $deleteFromTable"
 
-#   # Ensure the file is writable
-#   if [[ ! -w "$dbPath" ]]; then
-#     echo "Error: Cannot write to the table '$dbPath'. Check file permissions."
-#     return 1
-#   fi
+#     # Read the schema (first row) from the table
+#     metaData=$(head -n 1 "$tablePath")
+    
+#     # Extract the column names
+#     columns=()
+#     IFS=','  # Internal Field Separator
+#     for col in $metaData; do
+#         columns+=("$col")  # Add each column to the array
+#     done
 
-#   # Extract the header row (first line)
-#   local header=$(head -n 1 "$dbPath")
+#     # Let the user select a column for deletion
+#     echo "Available Columns:"
+#     select selectedColumn in "${columns[@]}"; do
+#         if [ -n "$selectedColumn" ]; then
+#             break
+#         else
+#             echo "Invalid selection. Please try again."
+#         fi
+#     done
 
-#   # Sanity check: Ensure the header exists
-#   if [[ -z "$header" ]]; then
-#     echo "Error: Table '$dbPath' is empty or malformed."
-#     return 1
-#   fi
+#     # Prompt the user to enter the value to filter rows for deletion
+#     read -p "Enter the value for column '$selectedColumn' to filter rows for deletion: " value
 
-#   # Find the column number based on the column name
-#   local column_number=$(echo "$header" | awk -F',' -v col="$column_name" '{
-#       for (i = 1; i <= NF; i++) {
-#           if ($i == col) {
-#               print i;
-#               exit;
-#           }
-#       }
-#       exit 1; # Exit with an error code if the column is not found
-#   }')
+#     # Validate if a value was entered
+#     if [ -z "$value" ]; then
+#         echo "No value entered for deletion filter."
+#         return
+#     fi
 
-#   # Check if the column was found
-#   if [[ -z $column_number ]]; then
-#     echo "Error: Column '$column_name' does not exist in the table."
-#     return 1
-#   fi
-
-#   # Perform the deletion (excluding the header row)
-#   awk -F',' -v col="$column_number" -v val="$value" 'NR == 1 || $col != val' "$dbPath" > temp && mv temp "$dbPath"
-
-#   echo "Rows with column '$column_name' matching '$value' have been deleted from '$dbPath'."
-# }
-
-# deleteFromTable $1 $2 $3
-
-
-
-
-
-
-
-
-
-
-
-# deleteFromTable(){
-
-#   local dbPath=$1
-#   local column_name=$2
-#   local value=$3
-
-#   #check if the table exists
-
-#   if [[ ! -f "$dbPath" ]]; then
-#     echo "Table not found"
-#     return 1
-#   fi
-
-
-#   local header=$(head -n 1 "$dbPath")
-
-#     # Find the column number based on the column name
-#     local column_number=$(echo "$header" | awk -F',' -v col="$column_name" '{
+#     # Get the column index based on the selected column name
+#     columnIndex=$(echo "$metaData" | awk -F',' -v col="$selectedColumn" '{
 #         for (i = 1; i <= NF; i++) {
 #             if ($i == col) {
 #                 print i;
 #                 exit;
 #             }
 #         }
-#         exit 1; # Exit with an error code if the column is not found
 #     }')
 
-#     # Check if the column was found
-#     if [[ -z $column_number ]]; then
-#         echo "Error: Column '$column_name' does not exist in the table."
-#         return 1
+#     # Check if the column index was found
+#     if [ -z "$columnIndex" ]; then
+#         echo "Error: Selected column '$selectedColumn' does not exist in the table."
+#         return
 #     fi
 
-#     # prefom the deletion
-#     awk -F',' -v col="$column_number" -v val="$value" 'NR == 1 || $col != val' "$dbPath" > temp && mv temp "$dbPath"
+#     # Perform the deletion using awk
+#     awk -F',' -v col="$columnIndex" -v val="$value" 'NR == 1 || $col != val' "$tablePath" > temp && mv temp "$tablePath"
 
-
-#     echo "Rows with column '$column_name' matching '$value' have been deleted from '$dbPath'."
-
-
+#     # Confirm deletion
+#     echo "Rows where column '$selectedColumn' equals '$value' have been deleted from the table '$deleteFromTable'."
 # }
+
+# # Call the function
+# deleteFromTable $1
+
+
+
+
+
+
+
+
+

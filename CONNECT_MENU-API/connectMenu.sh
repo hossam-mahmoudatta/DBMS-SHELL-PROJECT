@@ -44,7 +44,7 @@ connectMenu() {
             connectMenu "$dbPath"
             ;;
         "Delete from Table")
-            ../CONNECT_MENU-API/deleteTable.sh "$dbPath"
+            ../CONNECT_MENU-API/deleteFromTable.sh "$dbPath"
             connectMenu "$dbPath"
             ;;
         "Drop Table")

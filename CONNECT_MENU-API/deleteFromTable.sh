@@ -5,118 +5,95 @@
 
 
 
-
-
-
-
-
-
-
-
 deleteFromTable() {
 
-  local dbPath=$1       # Path to the table (file)
-  local column_name=$2   # Column name to check for deletion
-  local value=$3         # Value to match in the column for deletion
-  local tableName=$(basename "$dbPath" .meta) # Extract table name from the file path
+      dbPath=$1  # Path to the database directory
+      dir="$dbPath/TABLES/"
+      
+      # Get the list of tables in the directory
+      tablesList=$(ls $dir)
 
-  # Sanity check: Ensure all required arguments are provided
-  if [[ -z "$dbPath" || -z "$column_name" || -z "$value" ]]; then
-    zenity --error --text="Error: Missing required arguments."
-    return 1
-  fi
+      # Check if the directory contains files
+      if [ -z "$tablesList" ]; then
+          zenity --info --text="You don't have any Tables!"
+          return
+      fi
 
-  # Check if the table (file) exists
-  if [[ ! -f "$dbPath/TABLES/$tableName.meta" ]]; then
-    zenity --error --text="Error: Table '$dbPath' not found."
-    return 1
-  fi
+      # Display the tables in a clickable list
+      deleteFromTable=$(zenity --list \
+          --title="Your Tables" \
+          --text="Select a Table:" \
+          --column="Tables" $tablesList)
 
-  # Ensure the file is readable
-  if [[ ! -r "$dbPath/TABLES/$tableName.meta" ]]; then
-    zenity --error --text="Error: Cannot read the table '$dbPath/TABLES/$tableName.meta'. Check file permissions."
-    return 1
-  fi
+      # Check if a table was selected
+      if [ -z "$deleteFromTable" ]; then
+          zenity --warning --text="No table selected."
+          return
+      fi
 
-  # Ensure the file is writable
-  if [[ ! -w "$dbPath/TABLES/$tableName.meta" ]]; then
-    zenity --error --text="Error: Cannot write to the table '$dbPath/TABLES/$tableName.meta'. Check file permissions."
-    return 1
-  fi
+      tablePath="$dbPath/TABLES/$deleteFromTable"
 
-  # Extract the header row (first line)
-  local header=$(head -n 1 "$dbPath/TABLES/$tableName.meta")
+      # Verify that the selected table is correct
+      zenity --info --text="You selected the Table: $deleteFromTable"
 
-  # Sanity check: Ensure the header exists
-  if [[ -z "$header" ]]; then
-    zenity --error --text="Error: Table '$dbPath/TABLES/$tableName.meta' is empty or malformed."
-    return 1
-  fi
+      # Read the schema (first row) from the table
+      metaData=$(head -n 1 "$tablePath")
+      
+      # Extract the column names
+      columns=()
+      IFS=','  # Internal Field Separator
+      for col in $metaData; do
+          columns+=("$col")  # Add each column to the array
+      done
 
-  # Find the column number based on the column name
-  local column_number=$(echo "$header" | awk -F',' -v col="$column_name" '{
-      for (i = 1; i <= NF; i++) {
-          if ($i == col) {
-              print i;
-              exit;
+      # Let the user select a column for deletion
+      selectedColumn=$(zenity --list \
+          --title="Select Column" \
+          --text="Select a Column to Filter Rows for Deletion:" \
+          --column="Columns" "${columns[@]}")
+
+      # Check if a column was selected
+      if [ -z "$selectedColumn" ]; then
+          zenity --warning --text="No column selected for deletion filter."
+          return
+      fi
+
+      # Prompt the user to enter the value to filter rows for deletion
+      value=$(zenity --entry \
+          --title="Enter Value" \
+          --text="Enter the value for column '$selectedColumn' to filter rows for deletion:")
+
+      # Validate if a value was entered
+      if [ -z "$value" ]; then
+          zenity --warning --text="No value entered for deletion filter."
+          return
+      fi
+
+      # Get the column index based on the selected column name
+      columnIndex=$(echo "$metaData" | awk -F',' -v col="$selectedColumn" '{
+          for (i = 1; i <= NF; i++) {
+              if ($i == col) {
+                  print i;
+                  exit;
+              }
           }
-      }
-      exit 1; # Exit with an error code if the column is not found
-  }')
+      }')
 
-  # Check if the column was found
-  if [[ -z $column_number ]]; then
-    zenity --error --text="Error: Column '$column_name' does not exist in the table."
-    return 1
-  fi
+      # Check if the column index was found
+      if [ -z "$columnIndex" ]; then
+          zenity --error --text="Selected column '$selectedColumn' does not exist in the table."
+          return
+      fi
 
-  # Perform the deletion (excluding the header row)
-  awk -F',' -v col="$column_number" -v val="$value" 'NR == 1 || $col != val' "$dbPath/TABLES/$tableName.meta" > temp && mv temp "$dbPath/TABLES/$tableName.meta"
+      # Perform the deletion using awk
+      awk -F',' -v col="$columnIndex" -v val="$value" 'NR == 1 || $col != val' "$tablePath" > temp && mv temp "$tablePath"
 
-  # Show success message with zenity
-  zenity --info --text="Rows with column '$column_name' matching '$value' have been deleted from '$dbPath/TABLES/$tableName.meta'."
+      # Confirm deletion
+      zenity --info --text="Rows where column '$selectedColumn' equals '$value' have been deleted from the table '$deleteFromTable'."
 }
 
-# Get the file path, column name, and value from the user via Zenity
-dbPath=$(zenity --file-selection --title="Select the Database File")
-if [[ -z "$dbPath/TABLES/$tableName.meta" ]]; then
-  zenity --error --text="No file selected. Exiting."
-  exit 1
-fi
-
-column_name=$(zenity --entry --title="Enter Column Name" --text="Please enter the column name to check for deletion:")
-if [[ -z "$column_name" ]]; then
-  zenity --error --text="No column name entered. Exiting."
-  exit 1
-fi
-
-value=$(zenity --entry --title="Enter Value to Delete" --text="Please enter the value to delete:")
-if [[ -z "$value" ]]; then
-  zenity --error --text="No value entered. Exiting."
-  exit 1
-fi
-
-# Run the function with the user input
-deleteFromTable "$dbPath/TABLES/$tableName.meta" "$column_name" "$value"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Call the function
+deleteFromTable $1
 
 
 

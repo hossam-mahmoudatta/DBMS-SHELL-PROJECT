@@ -43,10 +43,6 @@ insertTable() {
     # Read the schema (first row) from the table
     metaData=$(head -n 1 "$tablePath")
     echo $schema # Working till here
-
-    # Extract column names (using comma as the separator)
-    # Converts comma-separated metadata to newline-separated column names
-    columns=$(echo "$metaData" | tr ',' '\n')
     
     # Read the current number of rows in the table (excluding metadata)
     currentRowCount=$(wc -l < "$tablePath")

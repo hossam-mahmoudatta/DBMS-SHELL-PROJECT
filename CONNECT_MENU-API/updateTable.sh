@@ -83,24 +83,20 @@ dbPath=$1
     # Display the row to update
     zenity --info --text="You selected the following row to update:\n$rowToUpdate"
 
-    # Ask the user which column to update
+    # Ask the user which column to update (excluding the ID column)
+    columnNames=("${columns[@]:1}")  # Exclude the ID column
     selectedColumn=$(zenity --list \
         --title="Select Column to Update" \
         --text="Select a column to update:" \
-        --column="Columns" "${columns[@]:1}")  # Skip the first column (ID)
+        --column="Columns" "${columnNames[@]}")
     if [ $? -eq 1 ];
     then
         zenity --info --text="User Canceled!"
         return
     fi
-
-    # Ask for the new value for the selected column
-    newValue=$(zenity --entry \
-        --title="Enter New Value" \
-        --text="Enter the new value for column '$selectedColumn':")
-    if [ $? -eq 1 ];
+    if [ -z "$selectedColumn" ];
     then
-        zenity --info --text="Column Update Canceled!"
+        zenity --warning --text="No column selected."
         return
     fi
 
@@ -110,21 +106,38 @@ dbPath=$1
     do
         if [ "${columns[$i]%%:*}" == "$selectedColumn" ];
         then
-            columnIndex=$((i + 1))
+            columnIndex=$i
             break
         fi
     done
 
+    if [ "$columnIndex" -eq -1 ];
+    then
+        zenity --error --text="Error: Column index not found."
+        return
+    fi
 
-    # Update the row using awk
-    awk -v rowID="$rowID" -v colIndex="$columnIndex" -v newValue="$newValue" -F',' '
-    BEGIN { OFS = FS }
-    $1 == rowID {
-        $colIndex = newValue
-    }
-    { print }
-    ' "$tablePath" > tmp && mv tmp "$tablePath"
+    # Ask for the new value
+    newValue=$(zenity --entry \
+        --title="Enter New Value" \
+        --text="Enter the new value for column '$selectedColumn':")
+    if [ $? -eq 1 ];
+    then
+        zenity --info --text="Column Update Canceled!"
+        return
+    fi
 
+    # Update the selected row
+    updatedRow=$(awk -F',' -v rowID="$rowID" -v colIndex="$((columnIndex + 1))" -v newValue="$newValue" \
+    'BEGIN { OFS = "," } $1 == rowID { $colIndex = newValue } { print }' "$tablePath")
+
+    # # Update the selected row
+    # updatedRow=$(awk -F',' -v rowID="$rowID" -v colIndex="$columnIndex" -v newValue="$newValue" \
+    # 'BEGIN { OFS = "," } $1 == rowID { $colIndex = newValue } { print }' "$tablePath")
+
+    # Write the updated row back to the file
+    echo "$updatedRow" > "$tablePath"
+    
     zenity --info --text="Row with ID $rowID updated successfully."
 }
 

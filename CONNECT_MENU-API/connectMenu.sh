@@ -4,7 +4,7 @@
 
 connectMenu() {
     dbPath=$1
-    # echo "Im in connect menu now: $dbPath"
+    #echo "Im in connect menu now: $dbPath"
     dbName=$(basename "$dbPath")  # Extract just the database name
 
     choice=$(zenity --list \
@@ -25,6 +25,11 @@ connectMenu() {
         "Create Table")
             # pwd - had to change the path.
             ../CONNECT_MENU-API/createTable.sh  "$dbPath"
+            connectMenu "$dbPath"
+            ;;
+        "Select from Table")
+            # pwd - had to change the path.
+            ../CONNECT_MENU-API/selectFromTable.sh  "$dbPath"
             connectMenu "$dbPath"
             ;;
         "List Tables")

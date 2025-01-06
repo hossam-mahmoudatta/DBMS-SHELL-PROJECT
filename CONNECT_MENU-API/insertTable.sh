@@ -16,6 +16,21 @@ insertTable() {
     then
         zenity --info --text="You don't have any Tables!"
     else
+    # Display the databases in a clickable list
+        selectedTable=$(zenity --list --title="Your Tables" --text="Select a Table:" --column="Tables" $tablesList)
+
+        # Check if a database was selected
+        if [ -n "$selectedTable" ];
+        then
+            # Navigate to the next menu based on the selected database
+            zenity --info --text="You selected the database: $selectedDB"
+            
+            # Call a function or script for the next menu
+            # echo "Current Directory: $(pwd)"
+            # echo "Current Directory: $selectedDB"
+            # echo "Current Directory: $dir/$selectedDB"
+
+            ../CONNECT_MENU-API/connectMenu.sh "$dir/$selectedDB"
         # Use Zenity to display the contents in a list
         zenity --list --title="Your Tables" --text="Here are your Tables" --column="Items" $tablesList
     fi

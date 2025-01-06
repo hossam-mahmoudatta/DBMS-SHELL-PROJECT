@@ -1,3 +1,4 @@
 id:int,name:varchar,age:int,address:varchar
 1,fatma,21,maadi
 2,atta,20,maadi
+3,Abdo,24,Alex

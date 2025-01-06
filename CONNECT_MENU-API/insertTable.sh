@@ -20,7 +20,10 @@ insertTable() {
         zenity --info --text="You don't have any Tables!"
     else
         # Display the databases in a clickable list
-        selectedTable=$(zenity --list --title="Your Tables" --text="Select a Table:" --column="Tables" $tablesList)
+        selectedTable=$(zenity --list \
+            --title="Your Tables" \
+            --text="Select a Table:" \
+            --column="Tables" $tablesList)
 
         # Check if a table was selected
         if [ -n "$selectedTable" ];
@@ -56,6 +59,15 @@ insertTable() {
     else
         newID=1  # If the table is empty, start from ID 1
     fi
+
+    columns=()  # Initialize the columns array
+    IFS=','     # Internal field seperator understood by bash
+
+    # Split the schema into columns
+    for col in $schema;
+    do
+        columns+=("$col")  # Add each part into the columns array
+    done
     
     # Prompt for the rest of the data (excluding id)
     name=$(zenity --entry --title="Enter Data" --text="Enter the name:")

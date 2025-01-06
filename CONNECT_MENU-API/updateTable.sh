@@ -63,8 +63,8 @@ dbPath=$1
             --text="Enter the ID of the row you want to update:")
         if [ $? -eq 1 ];
         then
-        zenity --info --text="Update Canceled!"
-        return
+            zenity --info --text="Update Canceled!"
+            return
         fi
 
         # Find the row by ID (excluding the schema line)
@@ -98,7 +98,6 @@ dbPath=$1
     newValue=$(zenity --entry \
         --title="Enter New Value" \
         --text="Enter the new value for column '$selectedColumn':")
-    
     if [ $? -eq 1 ];
     then
         zenity --info --text="Column Update Canceled!"

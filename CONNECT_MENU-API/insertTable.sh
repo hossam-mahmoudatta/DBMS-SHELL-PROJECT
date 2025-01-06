@@ -66,8 +66,56 @@ insertTable() {
     # Split the schema into columns
     for col in $schema;
     do
-        columns+=("$col")  # Add each part into the columns array
+        columns+=("$col")  # Add each column
     done
+
+    # Initialize an empty string to hold the row data
+    row=""
+
+    # Iterate through each column and ask for the corresponding data value
+    for col in "${columns[@]}";
+    do
+        # Extract column name and type (assuming the schema is in 'name:type' format)
+        IFS=':' read -r colName colType <<< "$col"
+
+        # Prompt the user for the value of the column
+        value=$(zenity --entry --title="Enter Value for $colName" --text="Column: $colName, Data Type: $colType")
+
+        # Validate the input based on column type
+        case $colType in
+            int)
+                # Ensure the value is an integer
+                if ! [[ $value =~ ^[0-9]+$ ]]; then
+                    zenity --error --text="Invalid value for $colName. Expected an integer."
+                    continue  # Skip the current iteration and ask again
+                fi
+                ;;
+            float)
+                # Ensure the value is a float
+                if ! [[ $value =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+                    zenity --error --text="Invalid value for $colName. Expected a float."
+                    continue
+                fi
+                ;;
+            bool)
+                # Ensure the value is either 'true' or 'false'
+                if [[ $value != "true" && $value != "false" ]]; then
+                    zenity --error --text="Invalid value for $colName. Expected 'true' or 'false'."
+                    continue
+                fi
+                ;;
+        esac
+
+        # Add the value to the row data, separated by commas
+        if [ -z "$row" ]; then
+            row="$value"  # First value, no comma
+        else
+            row="$row,$value"  # Subsequent values, separated by commas
+        fi
+    done
+
+    echo "$row" >> "$tableFile"  # Append the row data to the table file
+    zenity --info --text="Data inserted successfully into the table."
     
     # Prompt for the rest of the data (excluding id)
     name=$(zenity --entry --title="Enter Data" --text="Enter the name:")

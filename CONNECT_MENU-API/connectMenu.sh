@@ -31,9 +31,21 @@ connectMenu() {
             ../CONNECT_MENU-API/listTable.sh "$dbPath"
             connectMenu "$dbPath"
             ;;
-        "Connect to a Database")
+        "Select from Table")
             ../CONNECT_MENU-API/connectDatabase.sh
             connectMenu
+            ;;
+        "Insert into Table")
+            ../CONNECT_MENU-API/insertTable.sh "$dbPath"
+            connectMenu "$dbPath"
+            ;;
+        "Update into Table")
+            ../CONNECT_MENU-API/updateTable.sh "$dbPath"
+            connectMenu "$dbPath"
+            ;;
+        "Delete from Table")
+            ../CONNECT_MENU-API/deleteTable.sh "$dbPath"
+            connectMenu "$dbPath"
             ;;
         "Drop Table")
             ../CONNECT_MENU-API/dropTable.sh "$dbPath"

@@ -1,10 +1,13 @@
 # Create Table Function 
 # Abdelrahman Khaled 
 
+<<<<<<< HEAD
 
 
 
 
+=======
+>>>>>>> origin/main
 deleteFromTable() {
 
       dbPath=$1  # Path to the database directory

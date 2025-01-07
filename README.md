@@ -3,17 +3,15 @@
 =====================================
 =====================================
 
-
-
 ## This is the official Repo for the Database Management System Bash Project
 
 =====================================
 =====================================
 
 ## Contributors:
-- [Hossam Mahmoud](hossam.uddin1@gmail.com)
-- [Abdelrahman Khaled](Abdelrahmankhalid27@gmail.com)
-- [Zeyad Tarek](ziadtarekmohamed32@gmail.com)
+### [Hossam Mahmoud](hossam.uddin1@gmail.com)
+### [Abdelrahman Khaled](Abdelrahmankhalid27@gmail.com)
+### [Zeyad Tarek](ziadtarekmohamed32@gmail.com)
 <br>
 
 ## Brief

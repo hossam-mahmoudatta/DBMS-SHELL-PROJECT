@@ -106,7 +106,8 @@ updateTable() {
     newValue=$(zenity --entry \
         --title="Enter New Value" \
         --text="Enter the new value for column '$selectedColumn':")
-    if [ -z "$newValue" ]; then
+    if [ -z "$newValue" ];
+    then
         zenity --warning --text="No value entered."
         return
     fi

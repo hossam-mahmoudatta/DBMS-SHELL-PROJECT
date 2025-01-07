@@ -16,13 +16,13 @@
 
 ## Brief
 This project implements a database system coded in Bash, powered by Zenity GUI.
-The DBMS provides basic operations like creating, reading, updating, and deleting databases / tables. It is implemented in a way that is very user friendly achieving very smooth and instant transitions between menu operations.
+The DBMS provides basic operations like creating, reading, updating, and deleting databases/tables. It is implemented in a very user-friendly way, achieving smooth and instant transitions between menu operations.
 
 ## Features
-  - [Create Database](#create-database)
-  - [View Databases](#view-databases)
-  - [Drop Database](#drop-database)
-  - **[Connect to Database](#connect-to-database)**
+  - Create Database
+  - View Databases
+  - Drop Database
+  - **Connect to Database**
     - ***Operations:***
       - Create Table
       - View Table
@@ -30,7 +30,7 @@ The DBMS provides basic operations like creating, reading, updating, and deletin
       - Insert Data into Table
       - Update Data into Table
       - Delete Data from Table
-  - [Error Handling](#error-handling)
+  - Error Handling
 <br>
 
 ## Project Structure

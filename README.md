@@ -11,9 +11,9 @@
 =====================================
 
 ## Contributors:
-### Hossam Mahmoud
-### Abdelrahman Khaled
-### Zeyad Tarek
+- [Hossam Mahmoud](hossam.uddin1@gmail.com)
+- [Abdelrahman Khaled](Abdelrahmankhalid27@gmail.com)
+- [Zeyad Tarek](ziadtarekmohamed32@gmail.com)
 <br>
 
 ## Brief
@@ -104,7 +104,7 @@ This project is licensed under the GPL License.
 ## Acknowledgments
 - [Zenity Documentation](https://help.gnome.org/users/zenity/stable/)
 - Bash scripting community and resources
-- Projection Description inspired by Tohamey & Samy
+- Project README inspired by Tohamey & Samy
 
 <br>
 
@@ -116,7 +116,7 @@ This project is licensed under the GPL License.
 
 Thank you for using our DBMS!  
 Feel free to reach out if you encounter any issues or have suggestions.
-- [Hossam Mahmoud](hossammaali@gmail.com)
+- [Hossam Mahmoud](hossam.uddin1@gmail.com)
 - [Abdelrahman Khaled](Abdelrahmankhalid27@gmail.com)
 - [Zeyad Tarek](ziadtarekmohamed32@gmail.com)
 

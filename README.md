@@ -1,4 +1,4 @@
-# DBMS-SHELL-PROJECT
+# DBMS-SHELL-PROJECT 🗃️
 
 =====================================
 =====================================
@@ -8,17 +8,17 @@
 =====================================
 =====================================
 
-## Contributors:
+## Contributors 👨‍💼
 ### [Hossam Mahmoud](hossam.uddin1@gmail.com)
 ### [Abdelrahman Khaled](Abdelrahmankhalid27@gmail.com)
 ### [Zeyad Tarek](ziadtarekmohamed32@gmail.com)
 <br>
 
-## Brief
+## Brief 📃
 This project implements a database system coded in Bash, powered by Zenity GUI.
 The DBMS provides basic operations like creating, reading, updating, and deleting databases/tables. It is implemented in a very user-friendly way, achieving smooth and instant transitions between menu operations.
 
-## Features
+## Features 🌟
   - Create Database
   - View Databases
   - Drop Database
@@ -33,15 +33,15 @@ The DBMS provides basic operations like creating, reading, updating, and deletin
   - Error Handling
 <br>
 
-## Project Structure
+## Project Structure 🪜
 The project is structured in the following manner:
 
 
-### Entry Point
+### Entry Point 🚦
 - **`mainMenu.sh`**: You can run the application by running this file!
 
 
-### Script APIs
+### Script APIs 📃
 Each operation is encapsulated in its own script file to enhance organization and maintainability:
 
 - **Main Menu APIs**
@@ -63,50 +63,52 @@ Each operation is encapsulated in its own script file to enhance organization an
 
 <br>
 
-## Requirements
+## Requirements 📃
 - Bash / Zsh Shells
 - Zenity (to enable the GUI interface)
 - Linux-based operating system
 
 <br>
 
-## Usage
+## Usage 🪧
 ## Prerequisites
 ### Install Zenity
 Zenity is required to run the graphical interface. Install it using:
+### For RedHat Based 💻:
 ```bash
-sudo apt-get install zenity
+sudo yum install zenity
 ```
 or
+### For Debian Based 💻:
 ```bash
-yum install zenity
+sudo apt-get install zenity
 ```
 
 <br>
 
-### To Run the App!
+### To Run the App 🏃🏻
 - **`mainMenu.sh`**: You can run the application by running this file!
 
 <br>
 
-## Directory Setup
+## Directory Setup 🎚️
 The script ensures that a directory named `DATABASES` is created in the main directory if it does not already exist. This directory will contain all the databases created and their corresponding tables.
 
 <br>
 
-## License
+## License 🪪
 This project is licensed under the GPL License.
 
 <br>
 
-## Acknowledgments
+## Acknowledgments 🏁
 - [Zenity Documentation](https://help.gnome.org/users/zenity/stable/)
 - Bash scripting community and resources
 - Project README inspired by Tohamey & Samy
 
 <br>
 
-## Future Enhancements
+## Future Enhancements 💭
 - Add support for advanced SQL-like queries.
 - Add security measures for database access.
 
@@ -114,9 +116,9 @@ This project is licensed under the GPL License.
 
 Thank you for using our DBMS!  
 Feel free to reach out if you encounter any issues or have suggestions.
-- [Hossam Mahmoud](hossam.uddin1@gmail.com)
-- [Abdelrahman Khaled](Abdelrahmankhalid27@gmail.com)
-- [Zeyad Tarek](ziadtarekmohamed32@gmail.com)
+- [Hossam Mahmoud](hossam.uddin1@gmail.com) ✉️
+- [Abdelrahman Khaled](Abdelrahmankhalid27@gmail.com) ✉️
+- [Zeyad Tarek](ziadtarekmohamed32@gmail.com) ✉️
 
 
 =====================================

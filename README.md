@@ -52,75 +52,37 @@ The DBMS provides basic operations like creating, reading, updating, and deletin
 ## Project Structure
 The project is structured in the following manner:
 
+
 ### Entry Point
 - **`mainMenu.sh`**: You can run the application by running this file!
+
 
 ### Script APIs
 Each operation is encapsulated in its own script file to enhance organization and maintainability:
 
-- `connectToDataBase.sh`
+- `mainMenu.sh`
 - `createDataBase.sh`
+- `dropDataBase.sh`
+- `listDataBase.sh`
+- `connectDatabase.sh`
+- `connectMenu.sh`
 - `createTable.sh`
 - `deleteFromTable.sh`
-- `dropDataBase.sh`
 - `dropTable.sh`
-- `insertIntoTable.sh`
-- `listDataBases.sh`
-- `listTables.sh`
-- `manageDataBase.sh`
+- `insertTable.sh`
+- `listTable.sh`
+- `pickTable.sh`
 - `selectFromTable.sh`
-- `selectAllData.sh`
-- `selectByCondition.sh`
-- `selectByPrimaryKey.sh`
-- `selectSpecificColumns.sh`
-- `sortData.sh`
-- `updateRowInTable.sh`
-- `validation.sh`
+- `updateTable.sh`
+
 
 ## Requirements
 - Bash / Zsh Shells
 - Zenity (to enable the GUI interface)
 - Linux-based operating system
 
+
 ## Usage
-### Running the Script
-1. Ensure all required scripts are in the same directory as `databaseEngine.sh`.
-2. Run the script with the following command:
-   ```bash
-   ./databaseEngine.sh start
-   ```
-3. To display help information, use:
-   ```bash
-   ./databaseEngine.sh --help
-   ```
-
-### Interacting with the Application
-- Upon execution, the main menu will be displayed via Zenity.
-- Select an option from the menu to perform the corresponding action.
-- Follow the prompts for specific operations.
-
-## Directory Setup
-The script ensures that a directory named `DBMS` is created in the user's home directory if it does not already exist. This directory is used to store database files and related data.
-
-## Code Highlights
-### Menu System
-The menu system is implemented using Zenity's `--list` option, providing a clean and interactive interface:
-```bash
-choice=$(zenity --list --title="Database Engine" --column="Options" "${menu[@]}" --height=250)
-```
-### Error Handling
-Invalid selections are gracefully handled with error messages displayed using Zenity:
-```bash
-zenity --error --text="Invalid option. Please try again."
-```
-### Directory Management
-Ensures the necessary directory structure exists:
-```bash
-if ! isAlreadyExists -m; then
-  mkdir -p "$HOME/DBMS"
-fi
-```
-
 ## Prerequisites
 ### Install Zenity
 Zenity is required to run the graphical interface. Install it using:
@@ -131,30 +93,23 @@ or
 ```bash
 yum install zenity
 ```
+### Entry Point
+- **`mainMenu.sh`**: You can run the application by running this file!
 
-### Install figlet
-For stylized terminal output:
-```bash
-sudo apt-get install figlet
-```
-or
-```bash
-yum install figlet
-```
 
-## Contributing
-Contributions are welcome! Please follow these steps:
-1. Fork the repository.
-2. Create a new branch.
-3. Implement your changes.
-4. Submit a pull request.
+## Directory Setup
+The script ensures that a directory named `DATABASE` is created in the main directory if it does not already exist. This directory will contain all the databases created and their corresponding tables.
+
 
 ## License
 This project is licensed under the GPL License.
 
+
 ## Acknowledgments
 - [Zenity Documentation](https://help.gnome.org/users/zenity/stable/)
 - Bash scripting community and resources
+- Projection Description inspired by Tohamey & Samy
+
 
 ## Future Enhancements
 - Add support for advanced SQL-like queries.
@@ -164,6 +119,7 @@ This project is licensed under the GPL License.
 ---
 
 Thank you for using the Database Engine! If you encounter any issues or have suggestions, feel free to reach out.
+hossammaali@gmail.com
 
 
 

@@ -36,14 +36,6 @@ The DBMS provides basic operations like creating, reading, updating, and deletin
 ## Project Structure 🪜
 The project is structured in the following manner:
 
-
-### Entry Point 🚦
-- **`mainMenu.sh`**: You can run the application by running this file!
-
-
-### Script APIs 📃
-Each operation is encapsulated in its own script file to enhance organization and maintainability:
-
 - **Main Menu APIs**
   - `mainMenu.sh`
   - `createDataBase.sh`
@@ -63,8 +55,8 @@ Each operation is encapsulated in its own script file to enhance organization an
 
 <br>
 
-## Requirements 📃
-- Bash / Zsh Shells
+## Requirements to Run 📃
+- Bash / Zsh Shell
 - Zenity (to enable the GUI interface)
 - Linux-based operating system
 
@@ -86,13 +78,13 @@ sudo apt-get install zenity
 
 <br>
 
-### To Run the App 🏃🏻
-- **`mainMenu.sh`**: You can run the application by running this file!
+## To Run the App 🏃🏻
+You can run the application by running this command: **`./mainMenu.sh`**
 
 <br>
 
 ## Directory Setup 🎚️
-The script ensures that a directory named `DATABASES` is created in the main directory if it does not already exist. This directory will contain all the databases created and their corresponding tables.
+The script ensures that a directory named `DATABASES` is created in the main directory if it does not exist. This directory will contain all the databases created and their corresponding tables.
 
 <br>
 
@@ -104,7 +96,7 @@ This project is licensed under the GPL License.
 ## Acknowledgments 🏁
 - [Zenity Documentation](https://help.gnome.org/users/zenity/stable/)
 - Bash scripting community and resources
-- Project README inspired by Tohamey & Samy
+- Project Description inspired by Tohamey & Samy
 
 <br>
 

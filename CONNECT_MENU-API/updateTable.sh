@@ -5,9 +5,6 @@
 #########################################################
 
 # This API should allow us to update any field inside the table
-
-
-
 updateTable() {
     dbPath=$1
     dir="$dbPath/TABLES/"
@@ -90,7 +87,7 @@ updateTable() {
             --column="Columns" "${columnNames[@]}")
         if [ -z "$selectedColumn" ];
         then
-            zenity --warning --text="No column selected."
+            zenity --error --text="No column selected."
             return
         fi
         # Prevent updating the ID column

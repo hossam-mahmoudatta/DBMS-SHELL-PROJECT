@@ -1,54 +1,84 @@
 # Create Table Function 
-# Abdelrahman Khaled 
-
-
+# Created: Abdelrahman Khaled 
+# Modified: Hossam Mahmoud
 
 dropTable() {
-    # Define the database path
+
+    
+
     dbPath=$1
+    dir="$dbPath/TABLES/"
 
-    # Display a Zenity input box to ask for the table name
-    tableName=$(zenity --entry --title="Drop Table" --text="Enter Table Name:")
+    # Verify the directory exists
+    if [ ! -d "$dir" ];
+    then
+        zenity --error \
+            --text="Error: Directory '$dir' does not exist."
+        return
+    fi
 
-    # If the user cancels the input box, exit the function
-    if [ -z "$tableName" ]; then
-        zenity --info --title="Drop Table" --text="No table name entered!"
+    # Get the list of files in the directory but without the IDCounter files
+    tablesList=$(ls $dir | grep -v '\_IDCounter')
+    if [ -z "$tablesList" ]; then
+        zenity --info \
+            --text="No tables found in the directory."
+        return
+    fi
+
+    # Select a table
+    selectedTable=$(zenity --list \
+        --title="Select a Table" \
+        --text="Available Tables:" \
+        --column="Tables" $tablesList)
+    if [ -z "$selectedTable" ];
+    then
+        zenity --warning \
+            --text="No table selected."
+        return
+    fi
+
+    tablePath="$dir/$selectedTable"
+
+    if [ ! -f "$tablePath" ];
+    then
+        zenity --error \
+            --text="Error: Table file '$tablePath' not found."
         return
     fi
 
 
-
-    # Construct the full path to the table
-  tablePath="$dbPath/TABLES/$tableName.meta"
-
-    # Debugging output
-    echo "Table path: $tablePath"
-
     # Check if the table exists
-    if [ -f "$tablePath" ]; then
-
+    if [ -f "$tablePath" ];
+    then
         # Confirm if you really want to delete the table
-        zenity --question --title="Confirm Deletion" \
+        zenity --question \
+            --title="Confirm Deletion" \
             --text="Are you sure you want to delete the $tableName table?" \
             --ok-label="Yes" --cancel-label="No"
         
         # If the user clicks "No", cancel the deletion
-        if [ $? -ne 0 ]; then
-            zenity --info --title="Drop Table" --text="Table $tableName not deleted."
+        if [ $? -ne 0 ];
+        then
+            zenity --info \
+                --title="Drop Table" \
+                --text="Table $tableName not deleted."
             return
         fi
 
         # Delete the table
         rm "$tablePath"
-        zenity --info --title="Drop Table" --text="Table $tableName deleted successfully."
+        zenity --info \
+            --title="Drop Table" \
+            --text="Table $tableName deleted successfully."
     else
-        zenity --error --title="Drop Table" --text="Table $tableName not found."
+        zenity --error \
+            --title="Drop Table" \
+            --text="Table $tableName not found."
     fi
 }
 
 # Call the function 
 dropTable $1
-
 
 
 

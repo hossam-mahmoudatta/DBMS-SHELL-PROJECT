@@ -1,95 +1,113 @@
 # Create Table Function 
-# Abdelrahman Khaled 
-
-
-
-
+# Created: Abdelrahman Khaled 
+# Modified: Hossam Mahmoud
 
 deleteFromTable() {
 
-      dbPath=$1  # Path to the database directory
-      dir="$dbPath/TABLES/"
-      
-      # Get the list of tables in the directory
-      tablesList=$(ls $dir)
+    dbPath=$1  # Path to the database directory
+    dir="$dbPath/TABLES/"
+    
+    # Get the list of files in the directory but without the IDCounter files
+    tablesList=$(ls $dir | grep -v '\_IDCounter')
 
-      # Check if the directory contains files
-      if [ -z "$tablesList" ]; then
-          zenity --info --text="You don't have any Tables!"
-          return
-      fi
+    # Check if the directory contains files
+    if [ -z "$tablesList" ];
+    then
+        zenity --info \
+            --text="You don't have any Tables!"
+        return
+    fi
 
-      # Display the tables in a clickable list
-      deleteFromTable=$(zenity --list \
-          --title="Your Tables" \
-          --text="Select a Table:" \
-          --column="Tables" $tablesList)
+    # Display the tables in a clickable list
+    selectedTable=$(zenity --list \
+        --title="Your Tables" \
+        --text="Select a Table:" \
+        --column="Tables" $tablesList)
 
-      # Check if a table was selected
-      if [ -z "$deleteFromTable" ]; then
-          zenity --warning --text="No table selected."
-          return
-      fi
+    # Check if a table was selected
+    if [ -z "$selectedTable" ];
+    then
+        zenity --error \
+            --text="No table selected."
+        return
+    fi
 
-      tablePath="$dbPath/TABLES/$deleteFromTable"
+    tablePath="$dbPath/TABLES/$selectedTable"
 
-      # Verify that the selected table is correct
-      zenity --info --text="You selected the Table: $deleteFromTable"
+    # Verify that the selected table is correct
+    zenity --info \
+        --text="You selected the Table: $selectedTable"
 
-      # Read the schema (first row) from the table
-      metaData=$(head -n 1 "$tablePath")
-      
-      # Extract the column names
-      columns=()
-      IFS=','  # Internal Field Separator
-      for col in $metaData; do
-          columns+=("$col")  # Add each column to the array
-      done
+    # Read the schema (first row) from the table
+    metaData=$(head -n 1 "$tablePath")
+    
+    # Extract the column names
+    columns=()
+    IFS=','  # Internal Field Separator
+    for col in $metaData;
+    do
+        columns+=("$col")  # Add each column to the array
+    done
 
-      # Let the user select a column for deletion
-      selectedColumn=$(zenity --list \
-          --title="Select Column" \
-          --text="Select a Column to Filter Rows for Deletion:" \
-          --column="Columns" "${columns[@]}")
+    while true;
+    do
+        # Select a column to update (including all columns)
+        selectedColumn=$(zenity --list \
+            --title="Select Column" \
+            --text="Select a Column for Deletion:" \
+            --column="Columns" "${columns[@]}")
+        if [ -z "$selectedColumn" ];
+        then
+            zenity --error --text="No column selected."
+            return
+        fi
+        # Prevent updating the ID column
+        if [ "$selectedColumn" == "${columnNames[0]}" ];
+        then
+            zenity --error --text="You aren't authorized to delete the ID column."
+            continue
+        fi
+        break
+    done
 
-      # Check if a column was selected
-      if [ -z "$selectedColumn" ]; then
-          zenity --warning --text="No column selected for deletion filter."
-          return
-      fi
+    # Prompt the user to enter the value to filter rows for deletion
+    value=$(zenity --entry \
+        --title="Enter Value" \
+        --text="Enter the value for column '$selectedColumn' to filter rows for deletion:")
 
-      # Prompt the user to enter the value to filter rows for deletion
-      value=$(zenity --entry \
-          --title="Enter Value" \
-          --text="Enter the value for column '$selectedColumn' to filter rows for deletion:")
+    # Validate if a value was entered
+    if [ -z "$value" ]; 
+    then
+        zenity --error --text="No value entered for deletion filter."
+        return
+    fi
 
-      # Validate if a value was entered
-      if [ -z "$value" ]; then
-          zenity --warning --text="No value entered for deletion filter."
-          return
-      fi
+    # Get the column index based on the selected column name
+    columnIndex=$(echo "$metaData" | awk -F',' -v col="$selectedColumn" \
+    '{
+        for (i = 1; i <= NF; i++) {
+            if ($i == col) {
+                print i;
+                exit;
+            }
+        }
+    }')
 
-      # Get the column index based on the selected column name
-      columnIndex=$(echo "$metaData" | awk -F',' -v col="$selectedColumn" '{
-          for (i = 1; i <= NF; i++) {
-              if ($i == col) {
-                  print i;
-                  exit;
-              }
-          }
-      }')
+    # Check if the column index was found
+    if [ -z "$columnIndex" ];
+    then
+        zenity --error \
+            --text="Selected column '$selectedColumn' does not exist in the table."
+        return
+    fi
 
-      # Check if the column index was found
-      if [ -z "$columnIndex" ]; then
-          zenity --error --text="Selected column '$selectedColumn' does not exist in the table."
-          return
-      fi
+    # Perform the deletion using awk
+    awk -F',' -v col="$columnIndex" -v val="$value" \
+        'NR == 1 || $col != val' \
+        "$tablePath" > temp && mv temp "$tablePath"
 
-      # Perform the deletion using awk
-      awk -F',' -v col="$columnIndex" -v val="$value" 'NR == 1 || $col != val' "$tablePath" > temp && mv temp "$tablePath"
-
-      # Confirm deletion
-      zenity --info --text="Rows where column '$selectedColumn' equals '$value' have been deleted from the table '$deleteFromTable'."
+    # Confirm deletion
+    zenity --info --text="Rows where column '$selectedColumn' equals '$value' have been deleted from the table '$selectedTable'."
 }
 
 # Call the function

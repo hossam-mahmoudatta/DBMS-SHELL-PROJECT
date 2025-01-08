@@ -5,14 +5,16 @@ selectTable() {
     dir="$dbPath/TABLES"
 
     # Check if the tables directory exists
-    if [ ! -d "$dir" ]; then
+    if [ ! -d "$dir" ];
+    then
         zenity --error --text="The tables directory does not exist!"
         return
     fi
 
     # Get the list of files in the directory but without the IDCounter files
     tablesList=$(ls $dir | grep -v '\_IDCounter')
-    if [ -z "$tablesList" ]; then
+    if [ -z "$tablesList" ];
+    then
         zenity --info --text="You don't have any tables!"
         return
     fi
@@ -21,7 +23,8 @@ selectTable() {
     selectedTable=$(zenity --list --title="Your Tables" --text="Select a Table:" --column="Tables" $tablesList)
 
     # Check if a table was selected
-    if [ -n "$selectedTable" ]; then
+    if [ -n "$selectedTable" ];
+    then
         zenity --info --text="You selected the table: $selectedTable"
 
         # Extract columns from the selected table

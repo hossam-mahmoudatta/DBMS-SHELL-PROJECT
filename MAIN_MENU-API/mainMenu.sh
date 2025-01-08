@@ -15,7 +15,7 @@ mainMenu() {
     choice=$(zenity --list \
         --title="ITI HZA DBMS Main Menu" \
         --text="Choose your preferred action:" \
-        --width=350 --height=350\
+        --width=450 --height=450\
         --column="DBMS Options:" \
         "Create a Database" \
         "List Databases" \

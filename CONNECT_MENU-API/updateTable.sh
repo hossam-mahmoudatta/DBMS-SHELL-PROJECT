@@ -18,8 +18,8 @@ updateTable() {
         return
     fi
 
-    # Get the list of tables
-    tablesList=$(ls "$dir" 2>/dev/null)
+    # Get the list of files in the directory but without the IDCounter files
+    tablesList=$(ls $dir | grep -v '\_IDCounter')
     if [ -z "$tablesList" ]; then
         zenity --info --text="No tables found in the directory."
         return
@@ -53,17 +53,20 @@ updateTable() {
 
     # Extract column names without types
     columnNames=()
-    for col in "${columns[@]}"; do
+    for col in "${columns[@]}";
+    do
         columnName="${col%%:*}"  # Extract everything before the ':'
         columnNames+=("$columnName")
     done
 
     # Select a row to update
-    while true; do
+    while true;
+    do
         rowID=$(zenity --entry \
             --title="Enter Row ID" \
             --text="Enter the ID of the row to update:")
-        if [ $? -ne 0 ]; then
+        if [ $? -ne 0 ];
+        then
             zenity --info --text="Update canceled."
             return
         fi
@@ -78,15 +81,26 @@ updateTable() {
 
     zenity --info --text="Row to update:\n$rowToUpdate"
 
-    # Select a column to update (including all columns)
-    selectedColumn=$(zenity --list \
-        --title="Select Column" \
-        --text="Select a column to update:" \
-        --column="Columns" "${columnNames[@]}")
-    if [ -z "$selectedColumn" ]; then
-        zenity --warning --text="No column selected."
-        return
-    fi
+    while true;
+    do
+        # Select a column to update (including all columns)
+        selectedColumn=$(zenity --list \
+            --title="Select Column" \
+            --text="Select a column to update:" \
+            --column="Columns" "${columnNames[@]}")
+        if [ -z "$selectedColumn" ];
+        then
+            zenity --warning --text="No column selected."
+            return
+        fi
+        # Prevent updating the ID column
+        if [ "$selectedColumn" == "${columnNames[0]}" ];
+        then
+            zenity --error --text="You cannot update the ID column."
+            continue
+        fi
+        break
+    done
 
     # Find column index
     columnIndex=-1
@@ -114,12 +128,15 @@ updateTable() {
 
     # Update the row
     tempFile=$(mktemp)
-    awk -F',' -v rowID="$rowID" -v colIndex="$((columnIndex + 1))" -v newValue="$newValue" \
+    awk -F',' -v rowID="$rowID" -v \
+        colIndex="$((columnIndex + 1))" \
+        -v newValue="$newValue" \
         'BEGIN { OFS = "," }
          $1 == rowID { $colIndex = newValue }
          { print }' "$tablePath" > "$tempFile"
 
-    if mv "$tempFile" "$tablePath"; then
+    if mv "$tempFile" "$tablePath";
+    then
         zenity --info --text="Row updated successfully!"
     else
         zenity --error --text="Error updating the table."

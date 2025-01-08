@@ -1,6 +1,6 @@
 # Update into Table API 
 # Created: Hossam Mahmoud
-
+# Modified: Abdelrahman Khaled
 #########################################################
 #########################################################
 
@@ -8,17 +8,22 @@
 updateTable() {
     dbPath=$1
     dir="$dbPath/TABLES/"
+    logFile="../LOGS/updateTable.log"
 
     # Verify the directory exists
-    if [ ! -d "$dir" ]; then
+    if [ ! -d "$dir" ];
+    then
         zenity --error --text="Error: Directory '$dir' does not exist."
+        echo "$(date) - Error: Directory '$dir' does not exist." >> "$logFile"
         return
     fi
 
     # Get the list of files in the directory but without the IDCounter files
     tablesList=$(ls $dir | grep -v '\_IDCounter')
-    if [ -z "$tablesList" ]; then
+    if [ -z "$tablesList" ];
+    then
         zenity --info --text="No tables found in the directory."
+        echo "$(date) - No tables found in the directory." >> "$logFile"
         return
     fi
 
@@ -27,14 +32,19 @@ updateTable() {
         --title="Select a Table" \
         --text="Available Tables:" \
         --column="Tables" $tablesList)
-    if [ -z "$selectedTable" ]; then
+    if [ -z "$selectedTable" ];
+    then
         zenity --warning --text="No table selected."
+        echo "$(date) - No table selected." >> "$logFile"
         return
     fi
 
     tablePath="$dir/$selectedTable"
-    if [ ! -f "$tablePath" ]; then
+    
+    if [ ! -f "$tablePath" ];
+    then
         zenity --error --text="Error: Table file '$tablePath' not found."
+        echo "$(date) - Error: Table file '$tablePath' not found." >> "$logFile"
         return
     fi
 
@@ -42,6 +52,7 @@ updateTable() {
     metaData=$(head -n 1 "$tablePath" 2>/dev/null)
     if [ -z "$metaData" ]; then
         zenity --error --text="Error: Table schema not found."
+        echo "$(date) - Error: Table schema not found." >> "$logFile"
         return
     fi
 
@@ -65,18 +76,21 @@ updateTable() {
         if [ $? -ne 0 ];
         then
             zenity --info --text="Update canceled."
+            echo "$(date) - Update canceled." >> "$logFile"
             return
         fi
 
         rowToUpdate=$(grep "^$rowID," "$tablePath" 2>/dev/null)
         if [ -z "$rowToUpdate" ]; then
             zenity --error --text="Row with ID '$rowID' not found. Try again."
+            echo "$(date) - Row with ID '$rowID' not found. Try again." >> "$logFile"
         else
             break
         fi
     done
 
     zenity --info --text="Row to update:\n$rowToUpdate"
+    echo "$(date) - Row to update: $rowToUpdate" >> "$logFile"
 
     while true;
     do
@@ -88,12 +102,14 @@ updateTable() {
         if [ -z "$selectedColumn" ];
         then
             zenity --error --text="No column selected."
+            echo "$(date) - No column selected." >> "$logFile"
             return
         fi
         # Prevent updating the ID column
         if [ "$selectedColumn" == "${columnNames[0]}" ];
         then
             zenity --error --text="You aren't authorized to update the ID column."
+            echo "$(date) - You aren't authorized to update the ID column." >> "$logFile"
             continue
         fi
         break
@@ -110,6 +126,7 @@ updateTable() {
 
     if [ "$columnIndex" -eq -1 ]; then
         zenity --error --text="Error: Column not found in schema."
+        echo "$(date) - Error: Column not found in schema." >> "$logFile"
         return
     fi
 
@@ -120,6 +137,7 @@ updateTable() {
     if [ -z "$newValue" ];
     then
         zenity --warning --text="No value entered."
+        echo "$(date) - No value entered." >> "$logFile"
         return
     fi
 
@@ -129,14 +147,16 @@ updateTable() {
         colIndex="$((columnIndex + 1))" \
         -v newValue="$newValue" \
         'BEGIN { OFS = "," }
-         $1 == rowID { $colIndex = newValue }
-         { print }' "$tablePath" > "$tempFile"
+        $1 == rowID { $colIndex = newValue }
+        { print }' "$tablePath" > "$tempFile"
 
     if mv "$tempFile" "$tablePath";
     then
         zenity --info --text="Row updated successfully!"
+        echo "$(date) - Row updated successfully!" >> "$logFile"
     else
         zenity --error --text="Error updating the table."
+        echo "$(date) - Error updating the table." >> "$logFile"
     fi
 }
 

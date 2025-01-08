@@ -3,17 +3,16 @@
 # Modified: Hossam Mahmoud
 
 dropTable() {
-
-    
-
     dbPath=$1
     dir="$dbPath/TABLES/"
+    logFile="../LOGS/dropTable.log"
 
     # Verify the directory exists
     if [ ! -d "$dir" ];
     then
         zenity --error \
             --text="Error: Directory '$dir' does not exist."
+        echo "Error: Directory '$dir' does not exist." >> "$logFile"
         return
     fi
 
@@ -22,6 +21,7 @@ dropTable() {
     if [ -z "$tablesList" ]; then
         zenity --info \
             --text="No tables found in the directory."
+        echo "No tables found in the directory." >> "$logFile"
         return
     fi
 
@@ -34,6 +34,7 @@ dropTable() {
     then
         zenity --warning \
             --text="No table selected."
+        echo "No table selected." >> "$logFile"
         return
     fi
 
@@ -43,6 +44,7 @@ dropTable() {
     then
         zenity --error \
             --text="Error: Table file '$tablePath' not found."
+        echo "Error: Table file '$tablePath' not found." >> "$logFile"
         return
     fi
 
@@ -53,7 +55,7 @@ dropTable() {
         # Confirm if you really want to delete the table
         zenity --question \
             --title="Confirm Deletion" \
-            --text="Are you sure you want to delete the $tableName table?" \
+            --text="Are you sure you want to delete the $selectedTable table?" \
             --ok-label="Yes" --cancel-label="No"
         
         # If the user clicks "No", cancel the deletion
@@ -61,7 +63,8 @@ dropTable() {
         then
             zenity --info \
                 --title="Drop Table" \
-                --text="Table $tableName not deleted."
+                --text="Table $selectedTable not deleted."
+            echo "Table $selectedTable not deleted." >> "$logFile"
             return
         fi
 
@@ -69,11 +72,13 @@ dropTable() {
         rm "$tablePath"
         zenity --info \
             --title="Drop Table" \
-            --text="Table $tableName deleted successfully."
+            --text="Table $selectedTable deleted successfully."
+        echo "Table $selectedTable deleted successfully." >> "$logFile"
     else
         zenity --error \
             --title="Drop Table" \
-            --text="Table $tableName not found."
+            --text="Table $selectedTable not found."
+        echo "Table $selectedTable not found." >> "$logFile"
     fi
 }
 

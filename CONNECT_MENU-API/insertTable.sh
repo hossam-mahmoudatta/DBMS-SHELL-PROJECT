@@ -9,19 +9,21 @@ insertTable() {
     dbPath=$1
     dir="$dbPath/TABLES/"
 
-    echo "Directory path: $dir" >> insertTable.log
+    logFile="../LOGS/insertTable.log"
+
+    echo "Directory path: $dir" >> "$logFile"
 
     # Get the list of files in the directory but without the IDCounter files
     tablesList=$(ls $dir | grep -v '\_IDCounter')
 
     # Stores in a log file
-    echo "Tables list: $tablesList" >> "../LOGS/insertTable.log"
+    echo "Tables list: $tablesList" >> "$logFile"
 
     # Check if the directory contains files
     if [ -z "$tablesList" ];
     then
         zenity --info --text="You don't have any Tables!"
-        echo "No tables found" >> ../LOGS/insertTable.log
+        echo "No tables found" >> "$logFile"
     else
         # Display the databases in a clickable list
         selectedTable=$(zenity --list \
@@ -29,7 +31,7 @@ insertTable() {
             --text="Select a Table:" \
             --column="Tables" $tablesList)
 
-        echo "Selected table: $selectedTable" >> ./LOGS/insertTable.log
+        echo "Selected table: $selectedTable" >> "$logFile"
 
         # Check if a table was selected
         if [ -n "$selectedTable" ];
@@ -38,7 +40,7 @@ insertTable() {
             zenity --info --text="You selected the Table: $selectedTable"
         else
             zenity --error --text="No database selected."
-            echo "No table selected" >> ./LOGS/insertTable.log
+            echo "No table selected" >> "$logFile"
             return
         fi
     fi
@@ -49,12 +51,12 @@ insertTable() {
 
     # Verify that the selected table is correct
     echo you are in insertTable $tablePath
-    echo "Table path: $tablePath" >> ./LOGS/insertTable.log
+    echo "Table path: $tablePath" >> "$logFile"
 
     # Read the schema (first row) from the table
     metaData=$(head -n 1 "$tablePath")
     echo $metaData # Working till here
-    echo "Metadata: $metaData" >> ./LOGS/insertTable.log
+    echo "Metadata: $metaData" >> "$logFile"
 
     # Initialize an empty string to hold the row data
     row=""
@@ -67,12 +69,12 @@ insertTable() {
         currentID=0
     fi 
 
-    echo "Current ID: $currentID" >> ./LOGS/insertTable.log
+    echo "Current ID: $currentID" >> "$logFile"
 
     # Increment the ID
     newID=$((currentID + 1))
 
-    echo "New ID: $newID" >> ./LOGS/insertTable.log
+    echo "New ID: $newID" >> "$logFile"
 
     # Update the ID counter file 
     echo "$newID" > "$tableIDCounterPath"
@@ -84,7 +86,7 @@ insertTable() {
         newID=$((newID + 1))
         # Update the ID counter file 
         echo "$newID" > "$tableIDCounterPath"
-        echo "Duplicate ID detected, new ID: $newID" >> ./LOGS/insertTable.log
+        echo "Duplicate ID detected, new ID: $newID" >> "$logFile"
     fi
 
     row=$newID
@@ -98,7 +100,7 @@ insertTable() {
         columns+=("$col")  # Add each column
     done
 
-    echo "Columns: ${columns[@]}" >> ./LOGS/insertTable.log
+    echo "Columns: ${columns[@]}" >> "$logFile"
 
     # Iterate through each column and ask for the corresponding data value
     # Why columns[@]:1, because i will skip the first column which is the id
@@ -108,20 +110,20 @@ insertTable() {
         # Extract column name and type (assuming the schema is in 'name:type' format)
         IFS=':' read -r colName colType <<< "$col"
 
-        echo "Column: $colName, Type: $colType" >> ./LOGS/insertTable.log
+        echo "Column: $colName, Type: $colType" >> "$logFile"
 
         # Prompt the user for the value of the column
         value=$(zenity --entry \
             --title="Enter Value for $colName" \
             --text="Column: $colName, Data Type: $colType")
 
-        echo "Value: $value" >> ./LOGS/insertTable.log
+        echo "Value: $value" >> "$logFile"
 
         # If the user clicks "No", break the loop
         if [ $? -eq 1 ];
         then
             zenity --error --text="No value was entered."
-            echo "No value entered" >> ./LOGS/insertTable.log
+            echo "No value entered" >> "$logFile"
             echo "$currentID" > "$tableIDCounterPath"
             return
         fi
@@ -133,7 +135,7 @@ insertTable() {
                 if ! [[ $value =~ ^[0-9]+$ ]];
                 then
                     zenity --error --text="Invalid value for $colName. Expected an integer."
-                    echo "Invalid value for $colName" >> ./LOGS/insertTable.log
+                    echo "Invalid value for $colName" >> "$logFile"
                     continue  # Skip the current iteration and ask again
                 fi
                 ;;
@@ -142,7 +144,7 @@ insertTable() {
                 if ! [[ $value =~ ^[0-9]+(\.[0-9]+)?$ ]];
                 then
                     zenity --error --text="Invalid value for $colName. Expected a float."
-                    echo "Invalid value for $colName" >> ./LOGS/insertTable.log
+                    echo "Invalid value for $colName" >> "$logFile"
                     continue
                 fi
                 ;;
@@ -151,7 +153,7 @@ insertTable() {
                 if [[ $value != "true" && $value != "false" ]];
                 then
                     zenity --error --text="Invalid value for $colName. Expected 'true' or 'false'."
-                    echo "Invalid value for $colName" >> ./LOGS/insertTable.log
+                    echo "Invalid value for $colName" >> "$logFile"
                     continue
                 fi
                 ;;
@@ -167,12 +169,12 @@ insertTable() {
     done
 
     echo "$row" >> "$tablePath"  # Append the row data to the table file
-    echo "Data inserted successfully into the table." >> ./LOGS/insertTable.log
+    echo "Data inserted successfully into the table." >> "$logFile"
     zenity --info --text="Data inserted successfully into the table."
 
     # Confirm the insertion
     zenity --info --text="Data inserted successfully with ID: $newID"
-    echo "Data inserted successfully with ID: $newID" >> ./LOGS/insertTable.log
+    echo "Data inserted successfully with ID: $newID" >> "$logFile"
 }
 
 

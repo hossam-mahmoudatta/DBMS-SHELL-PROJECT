@@ -106,7 +106,7 @@ createTable() {
     fi
   done
 
-  tableIDCounterPath="$dbPath/TABLES/$tableName+IDCounter"
+  tableIDCounterPath="$dbPath/TABLES/${tableName}_IDCounter"
 
   # Save the schema to the table file
   echo "$schema" > "$tablePath"

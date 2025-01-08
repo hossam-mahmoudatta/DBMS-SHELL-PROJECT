@@ -11,8 +11,9 @@
 insertTable() {
     dbPath=$1
     dir="$dbPath/TABLES/"
-    # Get the list of files in the directory
-    tablesList=$(ls $dir)
+    # Get the list of files in the directory but without the IDCounter files
+    tablesList=$(ls $dir | grep -v '\_IDCounter')
+
 
     # Check if the directory contains files
     if [ -z "$tablesList" ];
@@ -31,12 +32,15 @@ insertTable() {
             # Navigate to the next menu based on the selected database
             zenity --info --text="You selected the Table: $selectedTable"
         else
-            zenity --warning --text="No database selected."
+            zenity --error --text="No database selected."
+            return
         fi
     fi
 
     tablePath="$dbPath/TABLES/$selectedTable"
-    
+
+    tableIDCounterPath="$dbPath/TABLES/${selectedTable}_IDCounter"
+
     # Verify that the selected table is correct
     echo you are in insertTable $tablePath
 
@@ -44,20 +48,32 @@ insertTable() {
     metaData=$(head -n 1 "$tablePath")
     echo $metaData # Working till here
     
-    # Read the current number of rows in the table (excluding metadata)
-    currentRowCount=$(wc -l < "$tablePath")
-    
     # Initialize an empty string to hold the row data
     row=""
-
-    # Generate the new ID by incrementing the last ID
-    if [ "$currentRowCount" -gt 1 ];
-    then
-        lastID=$(tail -n 1 "$tablePath" | cut -d',' -f1)  # Get the last ID in the table
-        newID=$((lastID + 1))  # Increment the ID
+    
+    # Read the current ID from the counter file
+    if [ -f "$tableIDCounterPath" ];
+    then 
+        currentID=$(cat "$tableIDCounterPath") 
     else
-        newID=1  # If the table is empty, start from ID 1
+        currentID=0
+    fi 
+    
+    # Increment the ID
+    newID=$((currentID + 1))
+    
+    # Update the ID counter file 
+    echo "$newID" > "$tableIDCounterPath"
+    
+    # Check for duplicate ID in the table
+    if grep -q "^$newID," "$tablePath";
+    then
+        echo "Error: Duplicate ID detected"
+        newID=$((newID + 1))
+        # Update the ID counter file 
+        echo "$newID" > "$tableIDCounterPath"
     fi
+    
     row=$newID
 
     columns=()  # Initialize the columns array
@@ -82,6 +98,14 @@ insertTable() {
         value=$(zenity --entry \
             --title="Enter Value for $colName" \
             --text="Column: $colName, Data Type: $colType")
+
+        # If the user clicks "No", break the loop
+        if [ $? -eq 1 ];
+        then
+            zenity --error --text="No value was entered."
+            echo "$currentID" > "$tableIDCounterPath"
+            return
+        fi
 
         # Validate the input based on column type
         case $colType in

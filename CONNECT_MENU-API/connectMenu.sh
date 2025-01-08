@@ -4,6 +4,7 @@
 
 connectMenu() {
     logFile="../LOGS/connectMenu.log"
+    dbPath=$1
     echo "Connecting to database: $dbPath" >> "$logFile"
     dbName=$(basename "$dbPath")  # Extract just the database name
     echo "Database name: $dbName" >> "$logFile"

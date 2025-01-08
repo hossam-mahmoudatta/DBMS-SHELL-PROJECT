@@ -1,0 +1,61 @@
+Connecting to database: 
+Database name: 
+Listing tables...
+Tables listed successfully.
+Connecting to database: 
+Database name: 
+Listing tables...
+Tables listed successfully.
+Connecting to database: 
+Database name: 
+User canceled.
+Connecting to database: 
+Database name: 
+Listing tables...
+Tables listed successfully.
+Connecting to database: 
+Database name: 
+Listing tables...
+Tables listed successfully.
+Connecting to database: 
+Database name: 
+Inserting into table...
+Insertion successful.
+Connecting to database: 
+Database name: 
+User canceled.
+Connecting to database: ../DATABASES/ZozDB
+Database name: ZozDB
+Listing tables...
+Tables listed successfully.
+Connecting to database: ../DATABASES/ZozDB
+Database name: ZozDB
+Listing tables...
+Tables listed successfully.
+Connecting to database: ../DATABASES/ZozDB
+Database name: ZozDB
+Listing tables...
+Tables listed successfully.
+Connecting to database: ../DATABASES/ZozDB
+Database name: ZozDB
+Dropping table...
+Table dropped successfully.
+Connecting to database: ../DATABASES/ZozDB
+Database name: ZozDB
+Selecting from table...
+Selection successful.
+Connecting to database: ../DATABASES/ZozDB
+Database name: ZozDB
+Inserting into table...
+Insertion successful.
+Connecting to database: ../DATABASES/ZozDB
+Database name: ZozDB
+Updating table...
+Update successful.
+Connecting to database: ../DATABASES/ZozDB
+Database name: ZozDB
+Deleting from table...
+Deletion successful.
+Connecting to database: ../DATABASES/ZozDB
+Database name: ZozDB
+User canceled.

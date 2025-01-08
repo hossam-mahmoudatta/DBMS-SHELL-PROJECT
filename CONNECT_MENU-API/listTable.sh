@@ -3,9 +3,10 @@
 
 listTable() {
     dbPath=$1
-    dir="$dbPath/TABLES/"
-    # Get the list of files in the directory
-    tablesList=$(ls $dir)
+    dir="$dbPath/TABLES"
+    
+    # Get the list of files in the directory but without the IDCounter files
+    tablesList=$(ls $dir | grep -v '\_IDCounter')
 
     logFile="../LOGS/listTable.log"
 

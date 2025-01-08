@@ -24,7 +24,9 @@ selectTable() {
     fi
 
     # Display the tables in a clickable list
-    selectedTable=$(zenity --list --title="Your Tables" --text="Select a Table:" --column="Tables" $tablesList)
+    selectedTable=$(zenity --list \
+        --title="Your Tables" \
+        --text="Select a Table:" \--column="Tables" $tablesList)
 
     # Check if a table was selected
     if [ -n "$selectedTable" ];

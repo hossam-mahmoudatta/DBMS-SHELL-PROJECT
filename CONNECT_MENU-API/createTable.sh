@@ -35,6 +35,7 @@ createTable() {
 
     # Check if the table already exists
     tablePath="$dbPath/TABLES/$tableName"
+
     if [ -f "$tablePath" ];
     then
       zenity --error --text="Table '$tableName' already exists. Please choose a different name."
@@ -105,8 +106,11 @@ createTable() {
     fi
   done
 
+  tableIDCounterPath="$dbPath/TABLES/$tableName+IDCounter"
+
   # Save the schema to the table file
   echo "$schema" > "$tablePath"
+  echo 0 > "$tableIDCounterPath"
   zenity --info --text="Table Metadata created successfully: $schema"
 }
 

@@ -1,15 +1,132 @@
-# DBMS-SHELL-PROJECT
-This is a Repo for the DBMS Shell Project
+# DBMS-SHELL-PROJECT 🗃️
 
 =====================================
 =====================================
-This is the directory for the Shell Project
+
+## This is the official Repo for the Database Management System Bash Project
+
+=====================================
+=====================================
+
+## Contributors 👨‍💼
+### [Hossam Mahmoud](hossam.uddin1@gmail.com)
+### [Abdelrahman Khaled](Abdelrahmankhalid27@gmail.com)
+### [Zeyad Tarek](ziadtarekmohamed32@gmail.com)
+<br>
+
+## Brief 📃
+This project implements a database system coded in Bash, powered by Zenity GUI.
+The DBMS provides basic operations like creating, reading, updating, and deleting databases/tables. It is implemented in a very user-friendly way, achieving smooth and instant transitions between menu operations.
+
+## Features 🌟
+  - Create Database
+  - View Databases
+  - Drop Database
+  - **Connect to Database**
+    - ***Operations:***
+      - Create Table
+      - View Table
+      - Drop Table
+      - Insert Data into Table
+      - Update Data into Table
+      - Delete Data from Table
+  - Error Handling
+<br>
+
+## Project Structure 🪜
+The project is structured in the following manner:
+
+
+### Entry Point 🚦
+- **`mainMenu.sh`**: You can run the application by running this file!
+
+
+### Script APIs 📃
+Each operation is encapsulated in its own script file to enhance organization and maintainability:
+
+- **Main Menu APIs**
+  - `mainMenu.sh`
+  - `createDataBase.sh`
+  - `dropDataBase.sh`
+  - `listDataBase.sh`
+  - `connectDatabase.sh`
+  - `connectMenu.sh`
+- **Connect Database Menu APIs**
+  - `createTable.sh`
+  - `deleteFromTable.sh`
+  - `dropTable.sh`
+  - `insertTable.sh`
+  - `listTable.sh`
+  - `pickTable.sh`
+  - `selectFromTable.sh`
+  - `updateTable.sh`
+
+<br>
+
+## Requirements 📃
+- Bash / Zsh Shells
+- Zenity (to enable the GUI interface)
+- Linux-based operating system
+
+<br>
+
+## Usage 🪧
+## Prerequisites
+### Install Zenity
+Zenity is required to run the graphical interface. Install it using:
+### For RedHat Based 💻:
+```bash
+sudo yum install zenity
+```
+or
+### For Debian Based 💻:
+```bash
+sudo apt-get install zenity
+```
+
+<br>
+
+### To Run the App 🏃🏻
+- **`mainMenu.sh`**: You can run the application by running this file!
+
+<br>
+
+## Directory Setup 🎚️
+The script ensures that a directory named `DATABASES` is created in the main directory if it does not already exist. This directory will contain all the databases created and their corresponding tables.
+
+<br>
+
+## License 🪪
+This project is licensed under the GPL License.
+
+<br>
+
+## Acknowledgments 🏁
+- [Zenity Documentation](https://help.gnome.org/users/zenity/stable/)
+- Bash scripting community and resources
+- Project README inspired by Tohamey & Samy
+
+<br>
+
+## Future Enhancements 💭
+- Add support for advanced SQL-like queries.
+- Add security measures for database access.
+
+---
+
+Thank you for using our DBMS!  
+Feel free to reach out if you encounter any issues or have suggestions.
+- [Hossam Mahmoud](hossam.uddin1@gmail.com) ✉️
+- [Abdelrahman Khaled](Abdelrahmankhalid27@gmail.com) ✉️
+- [Zeyad Tarek](ziadtarekmohamed32@gmail.com) ✉️
+
+
 =====================================
 =====================================
 
 Bash Shell Script Database Management System (DBMS):
 
-The Project aim to develop DBMS, that will enable users to store and retrieve the data from Hard-disk.
+The Project aim to develop DBMS, that will enable users to store and retrieve the data from main storage.
 
 The Project Features:
 The Application will be CLI Menu based app, that will provide to user this Menu items:

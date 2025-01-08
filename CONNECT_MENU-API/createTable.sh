@@ -6,7 +6,9 @@ createTable() {
     # Ensure tables are stored in a dedicated folder
     dbPath=$1
     mkdir -p ../DATABASES/$dbPath/TABLES
-    echo "$(date) - Created tables folder in $dbPath" >> ../LOGS/createTable.log
+    
+    logFile="../LOGS/createTable.log"
+    echo "$(date) - Created tables folder in $dbPath" >> "$logFile"
 
     # This loop checks if the table name is valid, and if it already exists or not.
     while true;
@@ -19,7 +21,7 @@ createTable() {
     if [ $? -eq 1 ];
     then
         zenity --info --text="Table Creation Canceled!"
-        echo "$(date) - Table creation canceled" >> ../LOGS/createTable.log
+        echo "$(date) - Table creation canceled" >> "$logFile"
         return
     fi
 
@@ -28,7 +30,7 @@ createTable() {
     then
         zenity --warning \
             --text="Table name cannot be empty. Please try again."
-        echo "$(date) - Empty table name" >> ../LOGS/createTable.log
+        echo "$(date) - Empty table name" >> "$logFile"
         continue
     fi
 
@@ -37,7 +39,7 @@ createTable() {
     then
         zenity --error \
             --text="Invalid table name. Only alphanumeric characters and underscores are allowed."
-        echo "$(date) - Invalid table name" >> ../LOGS/createTable.log
+        echo "$(date) - Invalid table name" >> "$logFile"
         continue
     fi
 
@@ -48,10 +50,10 @@ createTable() {
     then
         zenity --error \
             --text="Table '$tableName' already exists. Please choose a different name."
-        echo "$(date) - Table already exists" >> ../LOGS/createTable.log
+        echo "$(date) - Table already exists" >> "$logFile"
         continue
     fi
-    echo "$(date) - Valid table name: $tableName" >> ../LOGS/createTable.log
+    echo "$(date) - Valid table name: $tableName" >> "$logFile"
     break
     done
 
@@ -69,7 +71,7 @@ createTable() {
     then
         zenity --info \
             --text="Table Fields Creation Canceled!"
-        echo "$(date) - Table fields creation canceled" >> ../LOGS/createTable.log
+        echo "$(date) - Table fields creation canceled" >> "$logFile"
         return
     fi
 
@@ -78,7 +80,7 @@ createTable() {
     then
         zenity --error \
             --text="Column name cannot be empty. Please try again."
-        echo "$(date) - Empty column name" >> ../LOGS/createTable.log
+        echo "$(date) - Empty column name" >> "$logFile"
         continue
     fi
 
@@ -94,7 +96,7 @@ createTable() {
     then
         zenity --info \
             --text="Data Types Selection Canceled!"
-        echo "$(date) - Data types selection canceled" >> ../LOGS/createTable.log
+        echo "$(date) - Data types selection canceled" >> "$logFile"
         return
     fi
 
@@ -103,7 +105,7 @@ createTable() {
     then
         zenity --error \
             --text="You must select a data type. Please try again."
-        echo "$(date) - No data type selected" >> ../LOGS/createTable.log
+        echo "$(date) - No data type selected" >> "$logFile"
         continue
     fi
 
@@ -116,7 +118,7 @@ createTable() {
         # If its not the first column
         schema="$schema,$columnName:$columnType"
     fi
-    echo "$(date) - Added column: $columnName:$columnType" >> ../LOGS/createTable.log
+    echo "$(date) - Added column: $columnName:$columnType" >> "$logFile"
 
     # Ask if the user wants to add another column
     addAnother=$(zenity --question \
@@ -127,7 +129,7 @@ createTable() {
     # If the user clicks "No", break the loop
     if [ $? -eq 1 ];
     then
-        echo "$(date) - No more columns" >> ../LOGS/createTable.log
+        echo "$(date) - No more columns" >> "$logFile"
         break
     fi
     done
@@ -137,7 +139,7 @@ createTable() {
     # Save the schema to the table file
     echo "$schema" > "$tablePath"
     echo 0 > "$tableIDCounterPath"
-    echo "$(date) - Table metadata created successfully: $schema" >> ../LOGS/createTable.log
+    echo "$(date) - Table metadata created successfully: $schema" >> "$logFile"
 
     zenity --info \
         --text="Table Metadata created successfully: $schema"

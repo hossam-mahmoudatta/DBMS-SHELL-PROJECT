@@ -3,10 +3,10 @@
 # Modified: Hossam Mahmoud
 
 deleteFromTable() {
-
     dbPath=$1  # Path to the database directory
     dir="$dbPath/TABLES/"
-    
+    logFile="../LOGS/deleteFromTable.log"
+
     # Get the list of files in the directory but without the IDCounter files
     tablesList=$(ls $dir | grep -v '\_IDCounter')
 
@@ -15,6 +15,7 @@ deleteFromTable() {
     then
         zenity --info \
             --text="You don't have any Tables!"
+        echo "$(date) - No tables found." >> "$logFile"
         return
     fi
 
@@ -29,6 +30,7 @@ deleteFromTable() {
     then
         zenity --error \
             --text="No table selected."
+        echo "$(date) - No table selected." >> "$logFile"
         return
     fi
 
@@ -37,10 +39,11 @@ deleteFromTable() {
     # Verify that the selected table is correct
     zenity --info \
         --text="You selected the Table: $selectedTable"
+    echo "$(date) - Selected table: $selectedTable" >> "$logFile"
 
     # Read the schema (first row) from the table
     metaData=$(head -n 1 "$tablePath")
-    
+        
     # Extract the column names
     columns=()
     IFS=','  # Internal Field Separator
@@ -59,12 +62,14 @@ deleteFromTable() {
         if [ -z "$selectedColumn" ];
         then
             zenity --error --text="No column selected."
+            echo "$(date) - No column selected." >> "$logFile"
             return
         fi
         # Prevent updating the ID column
         if [ "$selectedColumn" == "${columnNames[0]}" ];
         then
             zenity --error --text="You aren't authorized to delete the ID column."
+            echo "$(date) - Attempted to delete ID column." >> "$logFile"
             continue
         fi
         break
@@ -79,6 +84,7 @@ deleteFromTable() {
     if [ -z "$value" ]; 
     then
         zenity --error --text="No value entered for deletion filter."
+        echo "$(date) - No value entered for deletion filter." >> "$logFile"
         return
     fi
 
@@ -98,6 +104,7 @@ deleteFromTable() {
     then
         zenity --error \
             --text="Selected column '$selectedColumn' does not exist in the table."
+        echo "$(date) - Selected column does not exist." >> "$logFile"
         return
     fi
 
@@ -108,6 +115,7 @@ deleteFromTable() {
 
     # Confirm deletion
     zenity --info --text="Rows where column '$selectedColumn' equals '$value' have been deleted from the table '$selectedTable'."
+    echo "$(date) - Deleted rows from table $selectedTable where column $selectedColumn equals $value." >> "$logFile"
 }
 
 # Call the function

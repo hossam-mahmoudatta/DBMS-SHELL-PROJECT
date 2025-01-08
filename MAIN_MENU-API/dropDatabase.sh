@@ -2,44 +2,48 @@
 #!/bin/bash
 
 # Drop Database Function 
-# Abdelrahman Khaled
+# Created: Abdelrahman Khaled
 
-Drop_Database(){
+dropDatabase(){
+    logFile="../LOGS/dropDatabase.log"
 
-        echo "Drop Database"
+    # Use Zenity to database name
+    dbName=$(zenity --entry --title="Database Name" --text="Enter Database Name:")
 
-        # Use Zenity to database name
-        db_name=$(zenity --entry --title="Database Name" --text="Enter Database Name:")
+    # Check if the user canceled or left the input empty
+    if [ -z "$dbName" ];
+    then
+        zenity --error --text="Database name cannot be empty. Please provide a valid name."
+        echo "$(date) - Error: Database name cannot be empty." >> "$logFile"
+        return
+    fi
 
-        # Check if the user canceled or left the input empty
-        if [ -z "$db_name" ]; then
-                zenity --error --text="Database name cannot be empty. Please provide a valid name."
-                return
+    # Check if the database exists or not 
+    if [ -d "../DATABASES/$dbName" ];
+    then
+        # Use Zenity for confirmation before deletion
+        zenity --question --title="Confirm Deletion" --text="Are you in ur mind to decide deleting the '$dbName' database?" --ok-label="Yes" --cancel-label="No"
+
+        if [ $? -ne 0 ];
+        then 
+            zenity --info --text="Database $dbName Not Deleted."
+            echo "$(date) - Database $dbName not deleted." >> "$logFile"
+            return
         fi
 
-        # Check if the database exists or not 
-        if [ -d "../DATABASES/$db_name" ]; then
-
-                # Use Zenity for confirmation before deletion
-                zenity --question --title="Confirm Deletion" --text="Are you in ur mind to decide deleting the '$db_name' database?" --ok-label="Yes" --cancel-label="No"
-
-                if [ $? -ne 0 ]; then 
-                        zenity --info --text="Database $db_name Not Deleted."
-                        return
-                fi
-
-                # Delete the database (directory)
-                rm -r ../DATABASES/"$db_name"
-                zenity --info --text="Database $db_name Deleted Successfully!"
-                
-        else  
-                zenity --error --text="Database $db_name Not Found."
-        fi       
-
+        # Delete the database (directory)
+        rm -r ../DATABASES/"$dbName"
+        zenity --info --text="Database $dbName Deleted Successfully!"
+        echo "$(date) - Database $dbName deleted successfully." >> "$logFile"
+        
+    else  
+        zenity --error --text="Database $dbName Not Found."
+        echo "$(date) - Error: Database $dbName not found." >> "$logFile"
+    fi
 }
 
 # call to the function
-Drop_Database
+dropDatabase
 
 
 

@@ -1,10 +1,11 @@
 #!/bin/bash
-
 # Created: Abdelrahman Khaled
 
-    createDatabase() {
+createDatabase() {
+
     logFile="../LOGS/createDatabase.log"
-    db_name=$(zenity --entry \
+    
+    dbName=$(zenity --entry \
         --title="Create Database" \
         --text="Enter your database name:")
 
@@ -19,29 +20,29 @@
     fi
 
     # Validate the database name (no spaces, only alphanumeric characters, underscores, or camelCase)
-    if [[ ! "$db_name" =~ ^[a-zA-Z0-9_]+$ ]];
+    if [[ ! "$dbName" =~ ^[a-zA-Z0-9_]+$ ]];
     then
         zenity --error \
             --title="Invalid Database Name" \
             --text="Invalid database name. Avoid spaces and special characters. Use underscores (_) or camelCase if necessary."
-        echo "$(date) - Invalid Database Name: $db_name" >> "$logFile"
+        echo "$(date) - Invalid Database Name: $dbName" >> "$logFile"
         return
     fi
 
     # Check if the directory already exists
-    if [ -d "../DATABASES/$db_name" ];
+    if [ -d "../DATABASES/$dbName" ];
     then
         zenity --warning \
             --title="Database Exists" \
-            --text="Database \"$db_name\" already exists!"
-        echo "$(date) - Database Exists: $db_name" >> "$logFile"
+            --text="Database \"$dbName\" already exists!"
+        echo "$(date) - Database Exists: $dbName" >> "$logFile"
     else
         # Create the directory for the database
-        mkdir -p ../DATABASES/"$db_name"
+        mkdir -p ../DATABASES/"$dbName"
         zenity --info \
             --title="Database Created" \
-            --text="Database \"$db_name\" created successfully."
-        echo "$(date) - Database Created: $db_name" >> "$logFile"
+            --text="Database \"$dbName\" created successfully."
+        echo "$(date) - Database Created: $dbName" >> "$logFile"
     fi
 }
 

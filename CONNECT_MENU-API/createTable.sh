@@ -19,7 +19,7 @@ createTable() {
     if [ $? -eq 1 ];
     then
         zenity --info --text="Table Creation Canceled!"
-        echo "$(date) - Table creation canceled" >> ../DATABASES/$dbPath/logs.txt
+        echo "$(date) - Table creation canceled" >> ../LOGS/createTable.log
         return
     fi
 
@@ -28,7 +28,7 @@ createTable() {
     then
         zenity --warning \
             --text="Table name cannot be empty. Please try again."
-        echo "$(date) - Empty table name" >> ../DATABASES/$dbPath/logs.txt
+        echo "$(date) - Empty table name" >> ../LOGS/createTable.log
         continue
     fi
 
@@ -37,7 +37,7 @@ createTable() {
     then
         zenity --error \
             --text="Invalid table name. Only alphanumeric characters and underscores are allowed."
-        echo "$(date) - Invalid table name" >> ../DATABASES/$dbPath/logs.txt
+        echo "$(date) - Invalid table name" >> ../LOGS/createTable.log
         continue
     fi
 
@@ -48,10 +48,10 @@ createTable() {
     then
         zenity --error \
             --text="Table '$tableName' already exists. Please choose a different name."
-        echo "$(date) - Table already exists" >> ../DATABASES/$dbPath/logs.txt
+        echo "$(date) - Table already exists" >> ../LOGS/createTable.log
         continue
     fi
-    echo "$(date) - Valid table name: $tableName" >> ../DATABASES/$dbPath/logs.txt
+    echo "$(date) - Valid table name: $tableName" >> ../LOGS/createTable.log
     break
     done
 
@@ -69,7 +69,7 @@ createTable() {
     then
         zenity --info \
             --text="Table Fields Creation Canceled!"
-        echo "$(date) - Table fields creation canceled" >> ../DATABASES/$dbPath/logs.txt
+        echo "$(date) - Table fields creation canceled" >> ../LOGS/createTable.log
         return
     fi
 
@@ -78,7 +78,7 @@ createTable() {
     then
         zenity --error \
             --text="Column name cannot be empty. Please try again."
-        echo "$(date) - Empty column name" >> ../DATABASES/$dbPath/logs.txt
+        echo "$(date) - Empty column name" >> ../LOGS/createTable.log
         continue
     fi
 
@@ -94,7 +94,7 @@ createTable() {
     then
         zenity --info \
             --text="Data Types Selection Canceled!"
-        echo "$(date) - Data types selection canceled" >> ../DATABASES/$dbPath/logs.txt
+        echo "$(date) - Data types selection canceled" >> ../LOGS/createTable.log
         return
     fi
 
@@ -103,7 +103,7 @@ createTable() {
     then
         zenity --error \
             --text="You must select a data type. Please try again."
-        echo "$(date) - No data type selected" >> ../DATABASES/$dbPath/logs.txt
+        echo "$(date) - No data type selected" >> ../LOGS/createTable.log
         continue
     fi
 
@@ -116,7 +116,7 @@ createTable() {
         # If its not the first column
         schema="$schema,$columnName:$columnType"
     fi
-    echo "$(date) - Added column: $columnName:$columnType" >> ../DATABASES/$dbPath/logs.txt
+    echo "$(date) - Added column: $columnName:$columnType" >> ../LOGS/createTable.log
 
     # Ask if the user wants to add another column
     addAnother=$(zenity --question \
@@ -127,7 +127,7 @@ createTable() {
     # If the user clicks "No", break the loop
     if [ $? -eq 1 ];
     then
-        echo "$(date) - No more columns" >> ../DATABASES/$dbPath/logs.txt
+        echo "$(date) - No more columns" >> ../LOGS/createTable.log
         break
     fi
     done
@@ -137,7 +137,7 @@ createTable() {
     # Save the schema to the table file
     echo "$schema" > "$tablePath"
     echo 0 > "$tableIDCounterPath"
-    echo "$(date) - Table metadata created successfully: $schema" >> ../DATABASES/$dbPath/logs.txt
+    echo "$(date) - Table metadata created successfully: $schema" >> ../LOGS/createTable.log
 
     zenity --info \
         --text="Table Metadata created successfully: $schema"

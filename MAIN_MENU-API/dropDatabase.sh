@@ -1,44 +1,67 @@
 
 #!/bin/bash
 
-# Drop Database Function 
 # Created: Abdelrahman Khaled
 
+# Drop Database Function 
 dropDatabase(){
+
     logFile="../LOGS/dropDatabase.log"
+    
+    dir=../DATABASES
+    
+    databasesList=$(ls $dir)
 
-    # Use Zenity to database name
-    dbName=$(zenity --entry --title="Database Name" --text="Enter Database Name:")
-
-    # Check if the user canceled or left the input empty
-    if [ -z "$dbName" ];
+    # Check if the directory contains files
+    if [ -z "$databasesList" ];
     then
-        zenity --error --text="Database name cannot be empty. Please provide a valid name."
-        echo "$(date) - Error: Database name cannot be empty." >> "$logFile"
-        return
+        zenity --info --text="You don't have any Databases!"
+        echo "No databases found in directory: $dir" >> "$logFile"
+    else
+        # Use Zenity to display the contents in a list
+        selectedDB=$(zenity --list \
+            --title="Your Databases" \
+            --text="Here are your Databases" \
+            --column="Items" $databasesList)
+        echo "Databases listed successfully in directory: $dir" >> "$logFile"
+
+        # Check if a database was selected
+        if [ -n "$selectedDB" ];
+        then
+            # Navigate to the next menu based on the selected database
+            zenity --info --text="You selected the Database: $selectedDB"
+        else
+            zenity --error --text="No database selected."
+            echo "No database selected" >> "$logFile"
+            return
+        fi
     fi
 
     # Check if the database exists or not 
-    if [ -d "../DATABASES/$dbName" ];
+    if [ -d "../DATABASES/$selectedDB" ];
     then
         # Use Zenity for confirmation before deletion
-        zenity --question --title="Confirm Deletion" --text="Are you in ur mind to decide deleting the '$dbName' database?" --ok-label="Yes" --cancel-label="No"
+        zenity --question \
+            --title="Confirm Deletion" \
+            --text="Are you in ur mind to decide deleting the '$selectedDB' database?" \
+            --ok-label="Yes" \
+            --cancel-label="No"
 
         if [ $? -ne 0 ];
         then 
-            zenity --info --text="Database $dbName Not Deleted."
+            zenity --info --text="Database $selectedDB Not Deleted."
             echo "$(date) - Database $dbName not deleted." >> "$logFile"
             return
         fi
 
         # Delete the database (directory)
-        rm -r ../DATABASES/"$dbName"
-        zenity --info --text="Database $dbName Deleted Successfully!"
-        echo "$(date) - Database $dbName deleted successfully." >> "$logFile"
+        rm -r ../DATABASES/"$selectedDB"
+        zenity --info --text="Database $selectedDB Deleted Successfully!"
+        echo "$(date) - Database $selectedDB deleted successfully." >> "$logFile"
         
     else  
-        zenity --error --text="Database $dbName Not Found."
-        echo "$(date) - Error: Database $dbName not found." >> "$logFile"
+        zenity --error --text="Database $selectedDB Not Found."
+        echo "$(date) - Error: Database $selectedDB not found." >> "$logFile"
     fi
 }
 

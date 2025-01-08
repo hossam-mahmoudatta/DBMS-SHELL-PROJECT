@@ -96,7 +96,7 @@ updateTable() {
         # Prevent updating the ID column
         if [ "$selectedColumn" == "${columnNames[0]}" ];
         then
-            zenity --error --text="You cannot update the ID column."
+            zenity --error --text="You aren't authorized to update the ID column."
             continue
         fi
         break

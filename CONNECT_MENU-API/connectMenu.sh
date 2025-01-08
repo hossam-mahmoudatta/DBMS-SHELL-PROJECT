@@ -21,6 +21,11 @@ connectMenu() {
         "Delete from Table" \
         "Exit" --extra-button="Exit" )
     
+    if [ $? -ne 0 ];
+    then
+        zenity --info --text="User canceled."
+        return
+    fi
     case $choice in
         "Create Table")
             # pwd - had to change the path.

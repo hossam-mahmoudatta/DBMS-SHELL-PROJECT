@@ -1,4 +1,6 @@
-SelectTable() {
+# Created: Zeyad Tarek
+
+selectTable() {
     dbPath=$1
     dir="$dbPath/TABLES"
 
@@ -8,15 +10,15 @@ SelectTable() {
         return
     fi
 
-    # Get the list of tables in the directory
-    TableLists=$(ls "$dir")
-    if [ -z "$TableLists" ]; then
+    # Get the list of files in the directory but without the IDCounter files
+    tablesList=$(ls $dir | grep -v '\_IDCounter')
+    if [ -z "$tablesList" ]; then
         zenity --info --text="You don't have any tables!"
         return
     fi
 
     # Display the tables in a clickable list
-    selectedTable=$(zenity --list --title="Your Tables" --text="Select a Table:" --column="Tables" $TableLists)
+    selectedTable=$(zenity --list --title="Your Tables" --text="Select a Table:" --column="Tables" $tablesList)
 
     # Check if a table was selected
     if [ -n "$selectedTable" ]; then
@@ -93,4 +95,4 @@ SelectTable() {
 }
 
 # Call the function
-SelectTable "$1"
+selectTable "$1"

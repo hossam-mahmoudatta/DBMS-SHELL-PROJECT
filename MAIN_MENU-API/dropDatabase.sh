@@ -1,6 +1,5 @@
 
 #!/bin/bash
-
 # Created: Abdelrahman Khaled
 
 # Drop Database Function 
@@ -49,18 +48,21 @@ dropDatabase(){
 
         if [ $? -ne 0 ];
         then 
-            zenity --info --text="Database $selectedDB Not Deleted."
+            zenity --info \
+                --text="Database $selectedDB Not Deleted."
             echo "$(date) - Database $dbName not deleted." >> "$logFile"
             return
         fi
 
         # Delete the database (directory)
         rm -r ../DATABASES/"$selectedDB"
-        zenity --info --text="Database $selectedDB Deleted Successfully!"
+        zenity --info \
+            --text="Database $selectedDB Deleted Successfully!"
         echo "$(date) - Database $selectedDB deleted successfully." >> "$logFile"
         
     else  
-        zenity --error --text="Database $selectedDB Not Found."
+        zenity --error \
+            --text="Database $selectedDB Not Found."
         echo "$(date) - Error: Database $selectedDB not found." >> "$logFile"
     fi
 }
